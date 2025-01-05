@@ -3,21 +3,21 @@ import { pipeline } from "@huggingface/transformers";
 let classifier: any = null;
 
 const CROP_MODELS: { [key: string]: string } = {
-  maize: "microsoft/resnet-50",
-  rice: "microsoft/resnet-50",
-  wheat: "microsoft/resnet-50",
-  cotton: "microsoft/resnet-50",
-  sugarcane: "microsoft/resnet-50",
-  tomatoes: "microsoft/resnet-50",
-  chili: "microsoft/resnet-50",
-  bananas: "microsoft/resnet-50",
-  coconut: "microsoft/resnet-50",
-  groundnut: "microsoft/resnet-50",
-  soybean: "microsoft/resnet-50",
-  brinjal: "microsoft/resnet-50",
-  beans: "microsoft/resnet-50",
-  turmeric: "microsoft/resnet-50",
-  ginger: "microsoft/resnet-50"
+  maize: "Xenova/resnet-50",
+  rice: "Xenova/resnet-50",
+  wheat: "Xenova/resnet-50",
+  cotton: "Xenova/resnet-50",
+  sugarcane: "Xenova/resnet-50",
+  tomatoes: "Xenova/resnet-50",
+  chili: "Xenova/resnet-50",
+  bananas: "Xenova/resnet-50",
+  coconut: "Xenova/resnet-50",
+  groundnut: "Xenova/resnet-50",
+  soybean: "Xenova/resnet-50",
+  brinjal: "Xenova/resnet-50",
+  beans: "Xenova/resnet-50",
+  turmeric: "Xenova/resnet-50",
+  ginger: "Xenova/resnet-50"
 };
 
 export const initializeModel = async (cropType: string) => {
