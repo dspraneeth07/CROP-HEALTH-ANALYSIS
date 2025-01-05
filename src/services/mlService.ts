@@ -25,25 +25,42 @@ export const initializeModel = async (cropType: string) => {
     console.log(`Initializing model for ${cropType}`);
     const modelName = CROP_MODELS[cropType.toLowerCase()] || CROP_MODELS.maize;
     
-    classifier = await pipeline("image-classification", modelName);
+    // Initialize the classifier with image-classification task
+    classifier = await pipeline("image-classification", modelName, {
+      quantized: false, // Use non-quantized model for better accuracy
+    });
     
     console.log("Model initialized successfully");
     return true;
   } catch (error) {
     console.error("Error initializing model:", error);
-    return false;
+    throw error; // Propagate error to handle it in the UI
   }
 };
 
-export const analyzeImage = async (imageUrl: string): Promise<any> => {
+export const analyzeImage = async (imageUrl: string) => {
   if (!classifier) {
     throw new Error("Model not initialized");
   }
 
   try {
-    const results = await classifier(imageUrl);
+    console.log("Starting image analysis...");
+    
+    // Convert base64 to blob if needed
+    let imageInput = imageUrl;
+    if (imageUrl.startsWith('data:image')) {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      imageInput = URL.createObjectURL(blob);
+    }
+
+    const results = await classifier(imageInput, {
+      topk: 5, // Return top 5 predictions
+    });
+    
     console.log("Analysis results:", results);
     
+    // Map the results to our expected format
     return {
       diseaseName: results[0].label,
       confidence: Math.round(results[0].score * 100),
@@ -71,6 +88,6 @@ export const analyzeImage = async (imageUrl: string): Promise<any> => {
     };
   } catch (error) {
     console.error("Error analyzing image:", error);
-    throw error;
+    throw error; // Propagate error to handle it in the UI
   }
 };
