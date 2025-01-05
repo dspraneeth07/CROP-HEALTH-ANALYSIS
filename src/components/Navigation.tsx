@@ -1,5 +1,6 @@
 import { LanguageSelector } from "./LanguageSelector";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 
 export function Navigation() {
   return (
@@ -10,8 +11,12 @@ export function Navigation() {
         </div>
         
         <div className="hidden md:flex items-center space-x-6">
-          <Button variant="link" className="text-gray-600 hover:text-primary">Home</Button>
-          <Button variant="link" className="text-gray-600 hover:text-primary">About Us</Button>
+          <Link to="/">
+            <Button variant="link" className="text-gray-600 hover:text-primary">Home</Button>
+          </Link>
+          <Link to="/about">
+            <Button variant="link" className="text-gray-600 hover:text-primary">About Us</Button>
+          </Link>
           <Button variant="link" className="text-gray-600 hover:text-primary">Get Help</Button>
           <Button variant="link" className="text-gray-600 hover:text-primary">Contact</Button>
         </div>

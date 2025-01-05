@@ -5,7 +5,6 @@ import { useToast } from "@/hooks/use-toast";
 import { DiseaseHeader } from "./analysis/DiseaseHeader";
 import { DiseaseStatus } from "./analysis/DiseaseStatus";
 import { DiseaseTreatment } from "./analysis/DiseaseTreatment";
-import { generatePDF } from "./pdf/PDFGenerator";
 import { FarmerData, AnalysisData } from "./types/analysis";
 
 interface DiseaseAnalysisProps {
@@ -16,37 +15,15 @@ interface DiseaseAnalysisProps {
   analysisData?: AnalysisData;
 }
 
-export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: DiseaseAnalysisProps) {
+export function DiseaseAnalysis({ onBack, cropType, imageUrl, farmerData, analysisData }: DiseaseAnalysisProps) {
   const { toast } = useToast();
 
-  const handleDownloadPDF = async () => {
-    try {
-      if (!analysisData) {
-        toast({
-          title: "Error",
-          description: "Analysis data is required for PDF generation",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      console.log("Generating PDF with data:", { cropType, imageUrl, analysisData });
-      
-      const pdf = await generatePDF(cropType, imageUrl, analysisData);
-      pdf.save(`crop-analysis-${Date.now()}.pdf`);
-      
-      toast({
-        title: "Success",
-        description: "Your analysis report has been downloaded.",
-      });
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      toast({
-        title: "Error",
-        description: "Failed to generate PDF report. Please try again.",
-        variant: "destructive",
-      });
-    }
+  const handlePrint = () => {
+    window.print();
+    toast({
+      title: "Success",
+      description: "Print dialog opened.",
+    });
   };
 
   if (!analysisData) {
@@ -78,6 +55,28 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
         <CardTitle className="text-2xl">Disease Analysis Results for {cropType}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <h3 className="text-lg font-semibold mb-3">User Details</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm text-gray-500">Name</p>
+              <p className="font-medium">{farmerData.name}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Phone</p>
+              <p className="font-medium">{farmerData.phone}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Email</p>
+              <p className="font-medium">{farmerData.email || 'Not provided'}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Crop Type</p>
+              <p className="font-medium">{cropType}</p>
+            </div>
+          </div>
+        </div>
+        
         {imageUrl && (
           <div className="rounded-lg overflow-hidden shadow-lg mb-6">
             <img src={imageUrl} alt="Analyzed crop" className="w-full h-auto" />
@@ -103,11 +102,11 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
 
         <div className="flex justify-end mt-6">
           <Button 
-            onClick={handleDownloadPDF}
+            onClick={handlePrint}
             className="bg-primary hover:bg-primary/90 text-white"
           >
             <Download className="mr-2" />
-            Download PDF Report
+            Print Results
           </Button>
         </div>
       </CardContent>
