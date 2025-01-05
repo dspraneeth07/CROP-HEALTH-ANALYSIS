@@ -39,7 +39,7 @@ export function Navigation() {
         </div>
       </nav>
 
-      <footer className="bg-white/80 backdrop-blur-md border-t py-8 mt-16">
+      <footer className="bg-white/80 backdrop-blur-md border-t py-8 mt-auto">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-4">

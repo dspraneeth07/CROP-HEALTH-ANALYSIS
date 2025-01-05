@@ -51,11 +51,11 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-green-50 to-white">
       <AnimatedBackground />
       <Navigation />
       
-      <div className="container mx-auto px-4 pt-20">
+      <div className="container mx-auto px-4 pt-20 flex-grow">
         {step === 1 && (
           <>
             <section className="py-16">
