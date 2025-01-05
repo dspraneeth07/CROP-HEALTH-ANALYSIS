@@ -22,7 +22,6 @@ export function Navigation() {
           <Link to="/contact">
             <Button variant="link" className="text-gray-600 hover:text-primary">Contact</Button>
           </Link>
-          <Button variant="link" className="text-gray-600 hover:text-primary">Get Help</Button>
         </div>
 
         <div className="flex items-center space-x-4">
