@@ -11,6 +11,12 @@ interface DiseaseAnalysisProps {
   onBack: () => void;
   cropType?: string;
   imageUrl?: string;
+  farmerData?: {
+    name: string;
+    location: string;
+    phone: string;
+    email: string;
+  };
   analysisData?: {
     diseaseName: string;
     confidence: number;
@@ -277,7 +283,7 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData, farm
     addWrappedText(`Instructions: ${treatment.instructions}`, yPos);
 
     // Add watermark on each page
-    const totalPages = pdf.internal.getNumberOfPages();
+    const totalPages = pdf.internal.pages.length;
     for(let i = 1; i <= totalPages; i++) {
       pdf.setPage(i);
       pdf.setFont("helvetica", "italic");
