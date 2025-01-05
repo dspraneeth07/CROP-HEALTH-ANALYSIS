@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface DiseaseAnalysisProps {
   onBack: () => void;
+  cropType?: string;
   analysisData?: {
     diseaseName: string;
     confidence: number;
@@ -23,7 +24,7 @@ interface DiseaseAnalysisProps {
   };
 }
 
-export function DiseaseAnalysis({ onBack, analysisData }: DiseaseAnalysisProps) {
+export function DiseaseAnalysis({ onBack, cropType, analysisData }: DiseaseAnalysisProps) {
   const { toast } = useToast();
 
   const handleDownloadPDF = () => {
@@ -45,7 +46,7 @@ export function DiseaseAnalysis({ onBack, analysisData }: DiseaseAnalysisProps) 
         <CardContent>
           <div className="flex items-center justify-center h-40">
             <div className="animate-pulse text-gray-500">
-              Processing your image...
+              Processing your {cropType} image...
             </div>
           </div>
         </CardContent>
@@ -72,7 +73,7 @@ export function DiseaseAnalysis({ onBack, analysisData }: DiseaseAnalysisProps) 
         <Button variant="ghost" className="w-fit mb-4" onClick={onBack}>
           <ArrowLeft className="mr-2" /> Back
         </Button>
-        <CardTitle className="text-2xl">Disease Analysis Results</CardTitle>
+        <CardTitle className="text-2xl">Disease Analysis Results for {cropType}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid gap-4 md:grid-cols-2">

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
@@ -14,7 +15,26 @@ export interface FarmerData {
   location: string;
   phone: string;
   email: string;
+  cropType: string;
 }
+
+const crops = [
+  "Maize",
+  "Rice",
+  "Wheat",
+  "Cotton",
+  "Sugarcane",
+  "Tomatoes",
+  "Chili",
+  "Bananas",
+  "Coconut",
+  "Groundnut",
+  "Soybean",
+  "Brinjal",
+  "Beans",
+  "Turmeric",
+  "Ginger"
+];
 
 export function FarmerForm({ onBack, onNext }: FarmerFormProps) {
   const [formData, setFormData] = useState<FarmerData>({
@@ -22,10 +42,12 @@ export function FarmerForm({ onBack, onNext }: FarmerFormProps) {
     location: "",
     phone: "",
     email: "",
+    cropType: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Submitting farmer data with crop type:", formData);
     onNext(formData);
   };
 
@@ -37,7 +59,14 @@ export function FarmerForm({ onBack, onNext }: FarmerFormProps) {
     }));
   };
 
-  const isFormValid = formData.name && formData.location && formData.phone;
+  const handleCropSelect = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      cropType: value,
+    }));
+  };
+
+  const isFormValid = formData.name && formData.location && formData.phone && formData.cropType;
 
   return (
     <Card className="w-full animate-fade-up">
@@ -49,6 +78,24 @@ export function FarmerForm({ onBack, onNext }: FarmerFormProps) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="cropType" className="text-sm font-medium">
+              Crop Type *
+            </label>
+            <Select value={formData.cropType} onValueChange={handleCropSelect}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select your crop" />
+              </SelectTrigger>
+              <SelectContent>
+                {crops.map((crop) => (
+                  <SelectItem key={crop} value={crop.toLowerCase()}>
+                    {crop}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
               Name *
