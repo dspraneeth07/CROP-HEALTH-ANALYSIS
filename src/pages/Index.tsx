@@ -2,6 +2,8 @@ import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ImageUpload } from "@/components/ImageUpload";
+import { FarmerForm, FarmerData } from "@/components/FarmerForm";
+import { DiseaseAnalysis } from "@/components/DiseaseAnalysis";
 import { Leaf, Shield, Zap, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
@@ -23,42 +25,81 @@ const features = [
   },
 ];
 
+// Mock data for testing the disease analysis component
+const mockAnalysisData = {
+  diseaseName: "Maize Rust",
+  confidence: 85,
+  description: "A fungal disease that affects maize plants, characterized by rust-colored spots on leaves.",
+  affectedArea: 30,
+  normalRange: "0-5%",
+  status: "moderate" as const,
+  causes: [
+    "High humidity conditions",
+    "Poor air circulation",
+    "Presence of infected plant debris",
+  ],
+  prevention: [
+    "Implement crop rotation",
+    "Improve field ventilation",
+    "Remove infected plant material",
+    "Use resistant varieties when available",
+  ],
+  treatment: {
+    medicine: "Azoxystrobin",
+    dosage: "2.5 ml per liter",
+    frequency: "Every 10 days",
+    instructions: "Apply early morning or evening for best results. Ensure complete coverage of affected areas.",
+  },
+};
+
 const Index = () => {
   const [step, setStep] = useState(1);
+  const [farmerData, setFarmerData] = useState<FarmerData | null>(null);
 
   const handleGetStarted = () => {
     setStep(2);
-    console.log("Moving to step 2: Image Upload");
+    console.log("Moving to step 2: Farmer Details");
+  };
+
+  const handleFarmerSubmit = (data: FarmerData) => {
+    setFarmerData(data);
+    setStep(3);
+    console.log("Moving to step 3: Image Upload", data);
+  };
+
+  const handleImageAnalyzed = () => {
+    setStep(4);
+    console.log("Moving to step 4: Disease Analysis");
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <Navigation />
       
-      {step === 1 && (
-        <>
-          {/* Hero Section */}
-          <section className="pt-32 pb-16 px-4">
-            <div className="container mx-auto text-center animate-fade-up">
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                AI-Powered Crop Health Analysis
-              </h1>
-              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                We empower Indian farmers with AI tools to improve crop health using technology
-              </p>
-              <Button 
-                size="lg" 
-                className="bg-primary hover:bg-primary-dark"
-                onClick={handleGetStarted}
-              >
-                Get Started <ArrowRight className="ml-2" />
-              </Button>
-            </div>
-          </section>
+      <div className="container mx-auto px-4">
+        {step === 1 && (
+          <>
+            {/* Hero Section */}
+            <section className="pt-32 pb-16">
+              <div className="text-center animate-fade-up">
+                <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                  AI-Powered Crop Health Analysis
+                </h1>
+                <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                  We empower Indian farmers with AI tools to improve crop health using technology
+                </p>
+                <Button 
+                  size="lg" 
+                  className="bg-primary hover:bg-primary-dark"
+                  onClick={handleGetStarted}
+                >
+                  Get Started <ArrowRight className="ml-2" />
+                </Button>
+              </div>
+            </section>
 
-          {/* Features Section */}
-          <section className="py-16 px-4">
-            <div className="container mx-auto">
+            {/* Features Section */}
+            <section className="py-16">
               <h2 className="text-3xl font-bold text-center mb-12">Our Features</h2>
               <div className="grid md:grid-cols-3 gap-8">
                 {features.map((feature, index) => (
@@ -71,18 +112,43 @@ const Index = () => {
                   </Card>
                 ))}
               </div>
+            </section>
+          </>
+        )}
+
+        {step === 2 && (
+          <section className="pt-32 pb-16">
+            <div className="container mx-auto max-w-2xl">
+              <FarmerForm 
+                onBack={() => setStep(1)}
+                onNext={handleFarmerSubmit}
+              />
             </div>
           </section>
-        </>
-      )}
+        )}
 
-      {step === 2 && (
-        <section className="pt-32 pb-16 px-4">
-          <div className="container mx-auto max-w-2xl">
-            <ImageUpload onBack={() => setStep(1)} />
-          </div>
-        </section>
-      )}
+        {step === 3 && (
+          <section className="pt-32 pb-16">
+            <div className="container mx-auto max-w-2xl">
+              <ImageUpload 
+                onBack={() => setStep(2)}
+                onAnalyze={handleImageAnalyzed}
+              />
+            </div>
+          </section>
+        )}
+
+        {step === 4 && (
+          <section className="pt-32 pb-16">
+            <div className="container mx-auto max-w-2xl">
+              <DiseaseAnalysis
+                onBack={() => setStep(3)}
+                analysisData={mockAnalysisData}
+              />
+            </div>
+          </section>
+        )}
+      </div>
 
       {/* Footer */}
       <footer className="bg-white border-t py-8 mt-auto">

@@ -5,9 +5,10 @@ import { useState } from "react";
 
 interface ImageUploadProps {
   onBack: () => void;
+  onAnalyze: () => void;
 }
 
-export function ImageUpload({ onBack }: ImageUploadProps) {
+export function ImageUpload({ onBack, onAnalyze }: ImageUploadProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
@@ -26,10 +27,10 @@ export function ImageUpload({ onBack }: ImageUploadProps) {
     if (selectedImage) {
       setIsAnalyzing(true);
       console.log("Analyzing image...");
-      // Here we would normally send the image to the backend for analysis
+      // Simulate analysis delay
       setTimeout(() => {
         setIsAnalyzing(false);
-        // Show results (to be implemented)
+        onAnalyze();
       }, 2000);
     }
   };
