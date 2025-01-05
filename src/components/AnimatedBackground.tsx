@@ -2,7 +2,7 @@ import React from 'react';
 
 const AnimatedBackground = () => {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none bg-gradient-to-b from-green-50/50 to-white/80">
       {/* Leaves */}
       <div className="absolute inset-0">
         {[...Array(10)].map((_, i) => (
@@ -41,7 +41,7 @@ const AnimatedBackground = () => {
         {[...Array(8)].map((_, i) => (
           <div
             key={i}
-            className="animate-sway"
+            className="animate-sway origin-bottom"
             style={{ animationDelay: `${i * 0.2}s` }}
           >
             <svg width="32" height="64" viewBox="0 0 24 24" className="text-primary">
@@ -55,7 +55,7 @@ const AnimatedBackground = () => {
       </div>
 
       {/* Waterfall */}
-      <div className="absolute right-0 top-0 h-full w-1/4 bg-gradient-to-b from-transparent via-blue-200/20 to-blue-300/30 animate-flow" />
+      <div className="absolute right-0 top-0 h-full w-1/4 bg-gradient-to-b from-transparent via-blue-200/20 to-blue-300/30 animate-flow opacity-50" />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { useLanguageStore } from "./LanguageSelector";
 
 interface FarmerFormProps {
   onBack: () => void;
@@ -37,6 +38,7 @@ const crops = [
 ];
 
 export function FarmerForm({ onBack, onNext }: FarmerFormProps) {
+  const { t } = useLanguageStore();
   const [formData, setFormData] = useState<FarmerData>({
     name: "",
     location: "",
@@ -69,22 +71,24 @@ export function FarmerForm({ onBack, onNext }: FarmerFormProps) {
   const isFormValid = formData.name && formData.location && formData.phone && formData.cropType;
 
   return (
-    <Card className="w-full animate-fade-up">
+    <Card className="w-full animate-fade-up backdrop-blur-sm bg-white/80 shadow-xl border-t border-l border-white/20">
       <CardHeader>
-        <Button variant="ghost" className="w-fit mb-4" onClick={onBack}>
-          <ArrowLeft className="mr-2" /> Back
+        <Button variant="ghost" className="w-fit mb-4 hover:scale-105 transition-transform" onClick={onBack}>
+          <ArrowLeft className="mr-2" /> {t('back')}
         </Button>
-        <CardTitle className="text-2xl">Farmer Details</CardTitle>
+        <CardTitle className="text-2xl bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
+          {t('farmer_details')}
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2 transition-all duration-300 hover:translate-x-1">
             <label htmlFor="cropType" className="text-sm font-medium">
-              Crop Type *
+              {t('crop_type')} *
             </label>
             <Select value={formData.cropType} onValueChange={handleCropSelect}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select your crop" />
+              <SelectTrigger className="bg-white/50 backdrop-blur-sm hover:bg-white/80 transition-colors">
+                <SelectValue placeholder={t('select_crop')} />
               </SelectTrigger>
               <SelectContent>
                 {crops.map((crop) => (
@@ -96,37 +100,39 @@ export function FarmerForm({ onBack, onNext }: FarmerFormProps) {
             </Select>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 transition-all duration-300 hover:translate-x-1">
             <label htmlFor="name" className="text-sm font-medium">
-              Name *
+              {t('name')} *
             </label>
             <Input
               id="name"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter your full name"
+              placeholder={t('enter_name')}
+              className="bg-white/50 backdrop-blur-sm hover:bg-white/80 transition-colors"
               required
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 transition-all duration-300 hover:translate-x-1">
             <label htmlFor="location" className="text-sm font-medium">
-              Location *
+              {t('location')} *
             </label>
             <Input
               id="location"
               name="location"
               value={formData.location}
               onChange={handleChange}
-              placeholder="Enter your location"
+              placeholder={t('enter_location')}
+              className="bg-white/50 backdrop-blur-sm hover:bg-white/80 transition-colors"
               required
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 transition-all duration-300 hover:translate-x-1">
             <label htmlFor="phone" className="text-sm font-medium">
-              Phone Number *
+              {t('phone')} *
             </label>
             <Input
               id="phone"
@@ -134,14 +140,15 @@ export function FarmerForm({ onBack, onNext }: FarmerFormProps) {
               type="tel"
               value={formData.phone}
               onChange={handleChange}
-              placeholder="Enter your phone number"
+              placeholder={t('enter_phone')}
+              className="bg-white/50 backdrop-blur-sm hover:bg-white/80 transition-colors"
               required
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 transition-all duration-300 hover:translate-x-1">
             <label htmlFor="email" className="text-sm font-medium">
-              Email (Optional)
+              {t('email')} ({t('optional')})
             </label>
             <Input
               id="email"
@@ -149,13 +156,18 @@ export function FarmerForm({ onBack, onNext }: FarmerFormProps) {
               type="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email address"
+              placeholder={t('enter_email')}
+              className="bg-white/50 backdrop-blur-sm hover:bg-white/80 transition-colors"
             />
           </div>
 
           <div className="flex justify-end pt-4">
-            <Button type="submit" disabled={!isFormValid}>
-              Next
+            <Button 
+              type="submit" 
+              disabled={!isFormValid}
+              className="bg-primary hover:bg-primary-dark transition-all duration-300 hover:scale-105 disabled:hover:scale-100"
+            >
+              {t('next')}
               <ArrowRight className="ml-2" />
             </Button>
           </div>

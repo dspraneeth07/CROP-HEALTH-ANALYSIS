@@ -33,6 +33,19 @@ const languages: Language[] = [
       "prevention": "Prevention Steps",
       "treatment": "Treatment Recommendations",
       "download_pdf": "Download PDF Report",
+      "farmer_details": "Farmer Details",
+      "crop_type": "Crop Type",
+      "select_crop": "Select your crop",
+      "name": "Name",
+      "enter_name": "Enter your full name",
+      "location": "Location",
+      "enter_location": "Enter your location",
+      "phone": "Phone Number",
+      "enter_phone": "Enter your phone number",
+      "email": "Email",
+      "enter_email": "Enter your email address",
+      "optional": "Optional",
+      "next": "Next"
     }
   },
   {
@@ -60,6 +73,19 @@ const languages: Language[] = [
       "prevention": "నివారణ చర్యలు",
       "treatment": "చికిత్స సిఫార్సులు",
       "download_pdf": "PDF నివేదికను డౌన్‌లోడ్ చేయండి",
+      "farmer_details": "రైతు వివరాలు",
+      "crop_type": "పంట రకం",
+      "select_crop": "మీ పంటను ఎంచుకోండి",
+      "name": "పేరు",
+      "enter_name": "మీ పూర్తి పేరు నమోదు చేయండి",
+      "location": "ప్రాంతం",
+      "enter_location": "మీ ప్రాంతాన్ని నమోదు చేయండి",
+      "phone": "ఫోన్ నంబర్",
+      "enter_phone": "మీ ఫోన్ నంబర్‌ను నమోదు చేయండి",
+      "email": "ఇమెయిల్",
+      "enter_email": "మీ ఇమెయిల్ చిరునామాను నమోదు చేయండి",
+      "optional": "ఐచ్ఛికం",
+      "next": "తదుపరి"
     }
   },
   {
@@ -87,6 +113,19 @@ const languages: Language[] = [
       "prevention": "रोकथाम के उपाय",
       "treatment": "उपचार की सिफारिशें",
       "download_pdf": "PDF रिपोर्ट डाउनलोड करें",
+      "farmer_details": "किसान विवरण",
+      "crop_type": "फसल प्रकार",
+      "select_crop": "अपनी फसल चुनें",
+      "name": "नाम",
+      "enter_name": "अपना पूरा नाम दर्ज करें",
+      "location": "स्थान",
+      "enter_location": "अपना स्थान दर्ज करें",
+      "phone": "फोन नंबर",
+      "enter_phone": "अपना फोन नंबर दर्ज करें",
+      "email": "ईमेल",
+      "enter_email": "अपना ईमेल पता दर्ज करें",
+      "optional": "वैकल्पिक",
+      "next": "अगला"
     }
   },
   {
@@ -114,6 +153,19 @@ const languages: Language[] = [
       "prevention": "ತಡೆಗಟ್ಟುವ ಕ್ರಮಗಳು",
       "treatment": "ಚಿಕಿತ್ಸೆಯ ಶಿಫಾರಸುಗಳು",
       "download_pdf": "PDF ವರದಿಯನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+      "farmer_details": "ರೈತ ವಿವರಗಳು",
+      "crop_type": "ಬೆಳೆ ಪ್ರಕಾರ",
+      "select_crop": "ನಿಮ್ಮ ಬೆಳೆಯನ್ನು ಆಯ್ಕೆ ಮಾಡಿ",
+      "name": "ಹೆಸರು",
+      "enter_name": "ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
+      "location": "ಸ್ಥಳ",
+      "enter_location": "ನಿಮ್ಮ ಸ್ಥಳವನ್ನು ನಮೂದಿಸಿ",
+      "phone": "ಫೋನ್ ಸಂಖ್ಯೆ",
+      "enter_phone": "ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
+      "email": "ಇಮೇಲ್",
+      "enter_email": "ನಿಮ್ಮ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ",
+      "optional": "ಐಚ್ಛಿಕ",
+      "next": "ಮುಂದೆ"
     }
   },
   {
@@ -141,6 +193,19 @@ const languages: Language[] = [
       "prevention": "தடுப்பு நடவடிக்கைகள்",
       "treatment": "சிகிச்சை பரிந்துரைகள்",
       "download_pdf": "PDF அறிக்கையை பதிவிறக்கவும்",
+      "farmer_details": "விவசாயி விவரங்கள்",
+      "crop_type": "பயிர் வகை",
+      "select_crop": "உங்கள் பயிரைத் தேர்ந்தெடுக்கவும்",
+      "name": "பெயர்",
+      "enter_name": "உங்கள் முழு பெயரை உள்ளிடவும்",
+      "location": "இடம்",
+      "enter_location": "உங்கள் இடத்தை உள்ளிடவும்",
+      "phone": "தொலைபேசி எண்",
+      "enter_phone": "உங்கள் தொலைபேசி எண்ணை உள்ளிடவும்",
+      "email": "மின்னஞ்சல்",
+      "enter_email": "உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும்",
+      "optional": "விருப்ப",
+      "next": "அடுத்து"
     }
   }
 ];
