@@ -1,4 +1,4 @@
-import { Leaf } from "lucide-react";
+import { Virus2 } from "lucide-react";
 
 interface DiseaseHeaderProps {
   diseaseName: string;
@@ -9,7 +9,7 @@ export function DiseaseHeader({ diseaseName, confidence }: DiseaseHeaderProps) {
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2">
-        <Leaf className="w-6 h-6 text-primary animate-bounce" />
+        <Virus2 className="w-6 h-6 text-warning animate-pulse" />
         <h3 className="font-semibold text-lg">{diseaseName}</h3>
       </div>
       <div className="flex items-center gap-2">

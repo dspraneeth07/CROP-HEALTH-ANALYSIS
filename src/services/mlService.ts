@@ -66,16 +66,17 @@ export const initializeModel = async (cropType: string) => {
 
 const mapClassificationToDisease = (classification: string, confidence: number) => {
   // Map the general classification to crop-specific diseases
-  // This is a simplified mapping - in a real application, this would be more comprehensive
   if (confidence < 0.5) {
     return {
-      diseaseName: "Healthy",
+      diseaseName: "Healthy Plant",
       status: "healthy" as const
     };
   }
   
   return {
-    diseaseName: "Potential Disease Detected",
+    diseaseName: classification.split('_').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' '),
     status: confidence > 0.7 ? "severe" as const : "moderate" as const
   };
 };
