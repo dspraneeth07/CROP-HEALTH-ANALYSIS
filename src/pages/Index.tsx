@@ -6,6 +6,7 @@ import { FarmerForm, FarmerData } from "@/components/FarmerForm";
 import { DiseaseAnalysis } from "@/components/DiseaseAnalysis";
 import { Leaf, Shield, Zap, ArrowRight, Github } from "lucide-react";
 import { useState } from "react";
+import AnimatedBackground from "@/components/AnimatedBackground";
 
 const features = [
   {
@@ -50,10 +51,11 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white relative">
+      <AnimatedBackground />
       <Navigation />
       
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 relative">
         {step === 1 && (
           <>
             <section className="pt-32 pb-16">
@@ -126,7 +128,7 @@ export default function Index() {
         )}
       </div>
 
-      <footer className="bg-white border-t py-8 mt-auto">
+      <footer className="bg-white border-t py-8 mt-auto relative">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-600">
             Designed and Developed by Dhadi Sai Praneeth Reddy |{" "}

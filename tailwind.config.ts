@@ -18,6 +18,30 @@ export default {
       },
     },
     extend: {
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '50%': { transform: 'translateY(-20px) rotate(180deg)' },
+        },
+        sway: {
+          '0%, 100%': { transform: 'rotate(-5deg)' },
+          '50%': { transform: 'rotate(5deg)' },
+        },
+        'farmer-walk': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(400%)' },
+        },
+        flow: {
+          '0%': { backgroundPosition: '0% 0%' },
+          '100%': { backgroundPosition: '0% 100%' },
+        },
+      },
+      animation: {
+        float: 'float 6s ease-in-out infinite',
+        sway: 'sway 3s ease-in-out infinite',
+        'farmer-walk': 'farmer-walk 20s linear infinite',
+        flow: 'flow 2s linear infinite',
+      },
       colors: {
         primary: {
           DEFAULT: "#4CAF50",
@@ -59,30 +83,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-      },
-      keyframes: {
-        "fade-up": {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(10px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
-        },
-        "fade-in": {
-          "0%": {
-            opacity: "0",
-          },
-          "100%": {
-            opacity: "1",
-          },
-        },
-      },
-      animation: {
-        "fade-up": "fade-up 0.5s ease-out",
-        "fade-in": "fade-in 0.5s ease-out",
       },
     },
   },
