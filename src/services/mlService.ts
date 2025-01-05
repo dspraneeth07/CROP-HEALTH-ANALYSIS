@@ -26,8 +26,7 @@ export const initializeModel = async (cropType: string) => {
     const modelName = CROP_MODELS[cropType.toLowerCase()] || CROP_MODELS.maize;
     
     classifier = await pipeline("image-classification", modelName, {
-      revision: "main",
-      framework: "onnx"
+      revision: "main"
     });
     
     console.log("Model initialized successfully");
