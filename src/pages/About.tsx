@@ -31,7 +31,7 @@ const teamMembers = [
     name: "Tanishka Kora",
     role: "Research Member",
     education: "Bachelor of Engineering in Computer Science and Engineering (AI/ML)",
-    college: "Vardhaman College of Engineering",
+    college: "Vasavi College of Engineering",
     interests: "Artificial intelligence and machine learning in precision agriculture",
     background: "Developer of AI models for predictive analytics in agriculture",
   },
