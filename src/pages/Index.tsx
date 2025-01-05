@@ -144,13 +144,6 @@ export default function Index() {
         <li>Kasireddy Manideep Reddy</li>
         <li>Baggari Sahasra Reddy</li>
         <li>Kora Tanishka</li>
-      </ul>
-      <a
-        href="/about-us"
-        className="text-primary hover:text-primary-dark font-medium mt-2 block"
-      >
-        Learn more about our team
-      </a>
     </div>
 
     {/* Right Section: Made in India & Copyright */}
