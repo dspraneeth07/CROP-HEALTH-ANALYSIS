@@ -138,20 +138,14 @@ export default function Index() {
 
     {/* Center Section: Team Members */}
     <div className="text-center">
-      <h3 className="text-gray-800 font-semibold text-lg">Team</h3>
-      <div className="mt-4 grid gap-4">
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300">
-          <p className="text-gray-800 font-medium">Dhadi Sai Praneeth Reddy</p>
-        </div>
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300">
-          <p className="text-gray-800 font-medium">Kasireddy Manideep Reddy</p>
-        </div>
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300">
-          <p className="text-gray-800 font-medium">Baggari Sahasra Reddy</p>
-        </div>
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300">
-          <p className="text-gray-800 font-medium">Kora Tanishka</p>
-        </div>
+      <div className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+        <h3 className="text-green-600 font-bold text-lg underline mb-4">Team</h3>
+        <ul className="text-gray-800 font-medium space-y-2">
+          <li>Dhadi Sai Praneeth Reddy</li>
+          <li>Kasireddy Manideep Reddy</li>
+          <li>Baggari Sahasra Reddy</li>
+          <li>Kora Tanishka</li>
+        </ul>
       </div>
     </div>
 
