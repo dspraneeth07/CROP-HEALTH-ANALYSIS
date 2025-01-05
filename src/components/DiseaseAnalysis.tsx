@@ -10,9 +10,9 @@ import { FarmerData, AnalysisData } from "./types/analysis";
 
 interface DiseaseAnalysisProps {
   onBack: () => void;
-  cropType?: string;
-  imageUrl?: string;
-  farmerData?: FarmerData;
+  cropType: string;
+  imageUrl: string;
+  farmerData: FarmerData;
   analysisData?: AnalysisData;
 }
 
@@ -21,16 +21,30 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData, farm
 
   const handleDownloadPDF = async () => {
     try {
-      if (!analysisData || !imageUrl || !farmerData || !cropType) {
+      if (!analysisData) {
         toast({
           title: "Error",
-          description: "Missing required data for PDF generation",
+          description: "Analysis data is required for PDF generation",
           variant: "destructive",
         });
         return;
       }
 
-      console.log("Generating PDF with data:", { cropType, imageUrl, farmerData, analysisData });
+      if (!farmerData) {
+        toast({
+          title: "Error",
+          description: "Farmer data is required for PDF generation",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log("Generating PDF with data:", { 
+        cropType, 
+        imageUrl, 
+        farmerData, 
+        analysisData 
+      });
       
       const pdf = await generatePDF(cropType, imageUrl, farmerData, analysisData);
       pdf.save(`crop-analysis-${farmerData.name}-${Date.now()}.pdf`);
@@ -86,22 +100,20 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData, farm
         
         <div className="grid gap-4 md:grid-cols-2">
           <DiseaseHeader 
-            diseaseName={analysisData?.diseaseName || ""}
-            confidence={analysisData?.confidence || 0}
+            diseaseName={analysisData.diseaseName}
+            confidence={analysisData.confidence}
           />
           <DiseaseStatus 
-            status={analysisData?.status || "healthy"}
-            affectedArea={analysisData?.affectedArea || 0}
+            status={analysisData.status}
+            affectedArea={analysisData.affectedArea}
           />
         </div>
 
-        {analysisData && (
-          <DiseaseTreatment 
-            causes={analysisData.causes}
-            prevention={analysisData.prevention}
-            treatment={analysisData.treatment}
-          />
-        )}
+        <DiseaseTreatment 
+          causes={analysisData.causes}
+          prevention={analysisData.prevention}
+          treatment={analysisData.treatment}
+        />
 
         <div className="flex justify-end mt-6">
           <Button 
