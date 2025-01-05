@@ -25,34 +25,7 @@ const features = [
   },
 ];
 
-// Mock data for testing the disease analysis component
-const mockAnalysisData = {
-  diseaseName: "Maize Rust",
-  confidence: 85,
-  description: "A fungal disease that affects maize plants, characterized by rust-colored spots on leaves.",
-  affectedArea: 30,
-  normalRange: "0-5%",
-  status: "moderate" as const,
-  causes: [
-    "High humidity conditions",
-    "Poor air circulation",
-    "Presence of infected plant debris",
-  ],
-  prevention: [
-    "Implement crop rotation",
-    "Improve field ventilation",
-    "Remove infected plant material",
-    "Use resistant varieties when available",
-  ],
-  treatment: {
-    medicine: "Azoxystrobin",
-    dosage: "2.5 ml per liter",
-    frequency: "Every 10 days",
-    instructions: "Apply early morning or evening for best results. Ensure complete coverage of affected areas.",
-  },
-};
-
-const Index = () => {
+export default function Index() {
   const [step, setStep] = useState(1);
   const [farmerData, setFarmerData] = useState<FarmerData | null>(null);
 
@@ -79,7 +52,6 @@ const Index = () => {
       <div className="container mx-auto px-4">
         {step === 1 && (
           <>
-            {/* Hero Section */}
             <section className="pt-32 pb-16">
               <div className="text-center animate-fade-up">
                 <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
@@ -98,7 +70,6 @@ const Index = () => {
               </div>
             </section>
 
-            {/* Features Section */}
             <section className="py-16">
               <h2 className="text-3xl font-bold text-center mb-12">Our Features</h2>
               <div className="grid md:grid-cols-3 gap-8">
@@ -131,6 +102,7 @@ const Index = () => {
               <ImageUpload 
                 onBack={() => setStep(2)}
                 onAnalyze={handleImageAnalyzed}
+                cropType={farmerData?.cropType || "crop"}
               />
             </div>
           </section>
@@ -140,6 +112,7 @@ const Index = () => {
             <div className="container mx-auto max-w-2xl">
               <DiseaseAnalysis
                 onBack={() => setStep(3)}
+                cropType={farmerData?.cropType}
                 analysisData={mockAnalysisData}
               />
             </div>
@@ -147,7 +120,6 @@ const Index = () => {
         )}
       </div>
 
-      {/* Footer */}
       <footer className="bg-white border-t py-8 mt-auto">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-600">
@@ -166,6 +138,4 @@ const Index = () => {
       </footer>
     </div>
   );
-};
-
-export default Index;
+}

@@ -2,15 +2,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Upload, Camera } from "lucide-react";
 import { useState } from "react";
+import { initializeModel, analyzeImage } from "@/services/mlService";
+import { useToast } from "@/hooks/use-toast";
 
 interface ImageUploadProps {
   onBack: () => void;
   onAnalyze: () => void;
+  cropType: string;
 }
 
-export function ImageUpload({ onBack, onAnalyze }: ImageUploadProps) {
+export function ImageUpload({ onBack, onAnalyze, cropType }: ImageUploadProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const { toast } = useToast();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -23,15 +27,23 @@ export function ImageUpload({ onBack, onAnalyze }: ImageUploadProps) {
     }
   };
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (selectedImage) {
       setIsAnalyzing(true);
-      console.log("Analyzing image...");
-      // Simulate analysis delay
-      setTimeout(() => {
-        setIsAnalyzing(false);
+      try {
+        await initializeModel(cropType);
+        await analyzeImage(selectedImage);
         onAnalyze();
-      }, 2000);
+      } catch (error) {
+        console.error("Error during analysis:", error);
+        toast({
+          title: "Analysis Failed",
+          description: "There was an error analyzing the image. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsAnalyzing(false);
+      }
     }
   };
 
@@ -45,7 +57,7 @@ export function ImageUpload({ onBack, onAnalyze }: ImageUploadProps) {
         >
           <ArrowLeft className="mr-2" /> Back
         </Button>
-        <CardTitle className="text-2xl">Upload Crop Image</CardTitle>
+        <CardTitle className="text-2xl">Upload {cropType} Image</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-primary transition-colors">
@@ -97,7 +109,7 @@ export function ImageUpload({ onBack, onAnalyze }: ImageUploadProps) {
                   </Button>
                 </div>
                 <p className="text-sm text-gray-500 mt-2">
-                  Upload a clear image of the affected crop part
+                  Upload a clear image of the affected {cropType} plant
                 </p>
               </div>
             </div>
