@@ -19,16 +19,34 @@ interface DiseaseAnalysisProps {
 export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData, farmerData }: DiseaseAnalysisProps) {
   const { toast } = useToast();
 
-  const handleDownloadPDF = () => {
-    if (!analysisData || !imageUrl || !farmerData || !cropType) return;
+  const handleDownloadPDF = async () => {
+    try {
+      if (!analysisData || !imageUrl || !farmerData || !cropType) {
+        toast({
+          title: "Error",
+          description: "Missing required data for PDF generation",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    const pdf = generatePDF(cropType, imageUrl, farmerData, analysisData);
-    pdf.save(`crop-analysis-${cropType}-${Date.now()}.pdf`);
-    
-    toast({
-      title: "PDF Generated",
-      description: "Your analysis report has been downloaded.",
-    });
+      console.log("Generating PDF with data:", { cropType, imageUrl, farmerData, analysisData });
+      
+      const pdf = await generatePDF(cropType, imageUrl, farmerData, analysisData);
+      pdf.save(`crop-analysis-${farmerData.name}-${Date.now()}.pdf`);
+      
+      toast({
+        title: "Success",
+        description: "Your analysis report has been downloaded.",
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF report. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (!analysisData) {
@@ -86,7 +104,10 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData, farm
         )}
 
         <div className="flex justify-end mt-6">
-          <Button onClick={handleDownloadPDF}>
+          <Button 
+            onClick={handleDownloadPDF}
+            className="bg-primary hover:bg-primary/90 text-white"
+          >
             <Download className="mr-2" />
             Download PDF Report
           </Button>
