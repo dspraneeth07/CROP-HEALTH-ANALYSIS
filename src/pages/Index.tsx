@@ -25,33 +25,6 @@ const features = [
   },
 ];
 
-// Mock analysis data for development
-const mockAnalysisData = {
-  diseaseName: "Leaf Blight",
-  confidence: 95,
-  description: "A common fungal disease affecting crop leaves",
-  affectedArea: 30,
-  normalRange: "0-5%",
-  status: "moderate" as const,
-  causes: [
-    "High humidity",
-    "Poor air circulation",
-    "Overcrowding of plants"
-  ],
-  prevention: [
-    "Proper spacing between plants",
-    "Regular pruning",
-    "Adequate ventilation",
-    "Fungicide application"
-  ],
-  treatment: {
-    medicine: "Copper-based fungicide",
-    dosage: "2-3 ml per liter of water",
-    frequency: "Every 7-10 days",
-    instructions: "Apply early morning or late evening for best results"
-  }
-};
-
 export default function Index() {
   const [step, setStep] = useState(1);
   const [farmerData, setFarmerData] = useState<FarmerData | null>(null);
@@ -127,25 +100,26 @@ export default function Index() {
             </div>
           </section>
         )}
-        {step === 3 && (
+        {step === 3 && farmerData && (
           <section className="pt-32 pb-16">
             <div className="container mx-auto max-w-2xl">
               <ImageUpload 
                 onBack={() => setStep(2)}
                 onAnalyze={handleImageAnalyzed}
-                cropType={farmerData?.cropType || "crop"}
+                cropType={farmerData.cropType}
               />
             </div>
           </section>
         )}
-        {step === 4 && (
+        {step === 4 && farmerData && imageUrl && (
           <section className="pt-32 pb-16">
             <div className="container mx-auto max-w-2xl">
               <DiseaseAnalysis
                 onBack={() => setStep(3)}
-                cropType={farmerData?.cropType}
+                cropType={farmerData.cropType}
                 analysisData={analysisData}
                 imageUrl={imageUrl}
+                farmerData={farmerData}
               />
             </div>
           </section>
