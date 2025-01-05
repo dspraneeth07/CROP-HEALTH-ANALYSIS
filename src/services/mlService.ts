@@ -1,6 +1,6 @@
-import { pipeline, Pipeline } from "@huggingface/transformers";
+import { pipeline } from "@huggingface/transformers";
 
-let classifier: Pipeline | null = null;
+let classifier: any = null;
 
 const CROP_MODELS: { [key: string]: string } = {
   maize: "google/vit-base-patch16-224-in21k",
@@ -25,10 +25,7 @@ export const initializeModel = async (cropType: string) => {
     console.log(`Initializing model for ${cropType}`);
     const modelName = CROP_MODELS[cropType.toLowerCase()] || CROP_MODELS.maize;
     
-    classifier = await pipeline("image-classification", modelName, {
-      revision: "main",
-      device: "cpu",
-    });
+    classifier = await pipeline("image-classification", modelName);
     
     console.log("Model initialized successfully");
     return true;
@@ -47,7 +44,6 @@ export const analyzeImage = async (imageUrl: string): Promise<any> => {
     const results = await classifier(imageUrl);
     console.log("Analysis results:", results);
     
-    // Process results into our application's format
     return {
       diseaseName: results[0].label,
       confidence: Math.round(results[0].score * 100),
