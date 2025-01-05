@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface ImageUploadProps {
   onBack: () => void;
-  onAnalyze: () => void;
+  onAnalyze: (results: any, image: string) => void;
   cropType: string;
 }
 
@@ -74,8 +74,8 @@ export function ImageUpload({ onBack, onAnalyze, cropType }: ImageUploadProps) {
       setIsAnalyzing(true);
       try {
         await initializeModel(cropType);
-        await analyzeImage(selectedImage);
-        onAnalyze();
+        const results = await analyzeImage(selectedImage);
+        onAnalyze(results, selectedImage);
       } catch (error) {
         console.error("Error during analysis:", error);
         toast({

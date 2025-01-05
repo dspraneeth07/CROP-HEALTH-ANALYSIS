@@ -45,7 +45,6 @@ export const analyzeImage = async (imageUrl: string) => {
   try {
     console.log("Starting image analysis...");
     
-    // Convert base64 to blob if needed
     let imageInput = imageUrl;
     if (imageUrl.startsWith('data:image')) {
       const response = await fetch(imageUrl);
@@ -54,19 +53,22 @@ export const analyzeImage = async (imageUrl: string) => {
     }
 
     const results = await classifier(imageInput, {
-      topk: 5 // Return top 5 predictions
+      topk: 5
     });
     
     console.log("Analysis results:", results);
+
+    // Map the model results to our application's format
+    const confidence = Math.round(results[0].score * 100);
+    const status = confidence > 70 ? "severe" : confidence > 40 ? "moderate" : "healthy";
     
-    // Map the results to our expected format
     return {
       diseaseName: results[0].label,
-      confidence: Math.round(results[0].score * 100),
-      description: "Analysis based on visual symptoms detected in the image.",
+      confidence,
+      description: `Analysis based on visual symptoms detected in the image. Confidence level: ${confidence}%`,
       affectedArea: Math.round(results[0].score * 100),
       normalRange: "0-5%",
-      status: results[0].score > 0.7 ? "severe" : results[0].score > 0.4 ? "moderate" : "healthy",
+      status,
       causes: [
         "Environmental stress",
         "Pathogenic infection",

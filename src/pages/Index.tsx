@@ -55,6 +55,8 @@ const mockAnalysisData = {
 export default function Index() {
   const [step, setStep] = useState(1);
   const [farmerData, setFarmerData] = useState<FarmerData | null>(null);
+  const [analysisData, setAnalysisData] = useState(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const handleGetStarted = () => {
     setStep(2);
@@ -67,9 +69,11 @@ export default function Index() {
     console.log("Moving to step 3: Image Upload", data);
   };
 
-  const handleImageAnalyzed = () => {
+  const handleImageAnalyzed = (results: any, image: string) => {
+    setAnalysisData(results);
+    setImageUrl(image);
     setStep(4);
-    console.log("Moving to step 4: Disease Analysis");
+    console.log("Moving to step 4: Disease Analysis", results);
   };
 
   return (
@@ -140,7 +144,8 @@ export default function Index() {
               <DiseaseAnalysis
                 onBack={() => setStep(3)}
                 cropType={farmerData?.cropType}
-                analysisData={mockAnalysisData}
+                analysisData={analysisData}
+                imageUrl={imageUrl}
               />
             </div>
           </section>
