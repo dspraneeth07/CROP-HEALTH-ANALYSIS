@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Upload, Camera } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { initializeModel, analyzeImage } from "@/services/mlService";
 import { useToast } from "@/hooks/use-toast";
 
@@ -14,6 +14,8 @@ interface ImageUploadProps {
 export function ImageUpload({ onBack, onAnalyze, cropType }: ImageUploadProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { toast } = useToast();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +26,41 @@ export function ImageUpload({ onBack, onAnalyze, cropType }: ImageUploadProps) {
         setSelectedImage(reader.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+      setShowCamera(true);
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+      toast({
+        title: "Camera Error",
+        description: "Unable to access camera. Please check permissions.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const captureImage = () => {
+    if (videoRef.current) {
+      const canvas = document.createElement("canvas");
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.drawImage(videoRef.current, 0, 0);
+        const imageDataUrl = canvas.toDataURL("image/jpeg");
+        setSelectedImage(imageDataUrl);
+        setShowCamera(false);
+        // Stop all video streams
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream?.getTracks().forEach(track => track.stop());
+      }
     }
   };
 
@@ -50,18 +87,37 @@ export function ImageUpload({ onBack, onAnalyze, cropType }: ImageUploadProps) {
   return (
     <Card className="w-full animate-fade-up">
       <CardHeader>
-        <Button
-          variant="ghost"
-          className="w-fit mb-4"
-          onClick={onBack}
-        >
+        <Button variant="ghost" className="w-fit mb-4" onClick={onBack}>
           <ArrowLeft className="mr-2" /> Back
         </Button>
         <CardTitle className="text-2xl">Upload {cropType} Image</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-primary transition-colors">
-          {selectedImage ? (
+          {showCamera ? (
+            <div className="space-y-4 w-full">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="w-full rounded-lg"
+              />
+              <div className="flex justify-center gap-4">
+                <Button onClick={() => {
+                  setShowCamera(false);
+                  if (videoRef.current) {
+                    const stream = videoRef.current.srcObject as MediaStream;
+                    stream?.getTracks().forEach(track => track.stop());
+                  }
+                }}>
+                  Cancel
+                </Button>
+                <Button onClick={captureImage}>
+                  Capture Photo
+                </Button>
+              </div>
+            </div>
+          ) : selectedImage ? (
             <div className="space-y-4 w-full">
               <img
                 src={selectedImage}
@@ -103,7 +159,7 @@ export function ImageUpload({ onBack, onAnalyze, cropType }: ImageUploadProps) {
                       Upload Image
                     </Button>
                   </label>
-                  <Button variant="outline">
+                  <Button variant="outline" onClick={startCamera}>
                     <Camera className="mr-2" />
                     Take Photo
                   </Button>

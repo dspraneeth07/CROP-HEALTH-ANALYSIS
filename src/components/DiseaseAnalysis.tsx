@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, ArrowLeft } from "lucide-react";
+import { Download, ArrowLeft, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import jsPDF from "jspdf";
 
 interface DiseaseAnalysisProps {
   onBack: () => void;
@@ -28,9 +29,69 @@ export function DiseaseAnalysis({ onBack, cropType, analysisData }: DiseaseAnaly
   const { toast } = useToast();
 
   const handleDownloadPDF = () => {
+    if (!analysisData) return;
+
+    const pdf = new jsPDF();
+    let yPos = 20;
+
+    // Add title
+    pdf.setFontSize(20);
+    pdf.text(`Crop Disease Analysis Report - ${cropType}`, 20, yPos);
+    yPos += 20;
+
+    // Add disease info
+    pdf.setFontSize(12);
+    pdf.text(`Disease: ${analysisData.diseaseName}`, 20, yPos);
+    yPos += 10;
+    pdf.text(`Confidence: ${analysisData.confidence}%`, 20, yPos);
+    yPos += 10;
+    pdf.text(`Status: ${analysisData.status}`, 20, yPos);
+    yPos += 10;
+    pdf.text(`Affected Area: ${analysisData.affectedArea}%`, 20, yPos);
+    yPos += 20;
+
+    // Add description
+    pdf.text("Description:", 20, yPos);
+    yPos += 10;
+    const descriptionLines = pdf.splitTextToSize(analysisData.description, 170);
+    pdf.text(descriptionLines, 20, yPos);
+    yPos += descriptionLines.length * 7 + 10;
+
+    // Add causes
+    pdf.text("Causes:", 20, yPos);
+    yPos += 10;
+    analysisData.causes.forEach(cause => {
+      pdf.text(`• ${cause}`, 25, yPos);
+      yPos += 7;
+    });
+    yPos += 10;
+
+    // Add prevention steps
+    pdf.text("Prevention Steps:", 20, yPos);
+    yPos += 10;
+    analysisData.prevention.forEach(step => {
+      pdf.text(`• ${step}`, 25, yPos);
+      yPos += 7;
+    });
+    yPos += 10;
+
+    // Add treatment
+    pdf.text("Treatment Recommendations:", 20, yPos);
+    yPos += 10;
+    pdf.text(`Medicine: ${analysisData.treatment.medicine}`, 25, yPos);
+    yPos += 7;
+    pdf.text(`Dosage: ${analysisData.treatment.dosage}`, 25, yPos);
+    yPos += 7;
+    pdf.text(`Frequency: ${analysisData.treatment.frequency}`, 25, yPos);
+    yPos += 7;
+    pdf.text(`Instructions: ${analysisData.treatment.instructions}`, 25, yPos);
+
+    // Save the PDF
+    pdf.save(`crop-analysis-${cropType}-${Date.now()}.pdf`);
+    
     toast({
-      title: "Coming Soon",
-      description: "PDF download functionality will be available soon.",
+      title: "PDF Generated",
+      description: "Your analysis report has been downloaded.",
     });
   };
 
