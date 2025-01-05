@@ -27,7 +27,7 @@ export default {
           '0%, 100%': { transform: 'rotate(-5deg)' },
           '50%': { transform: 'rotate(5deg)' },
         },
-        'farmer-walk': {
+        'tractor-move': {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(400%)' },
         },
@@ -35,12 +35,27 @@ export default {
           '0%': { backgroundPosition: '0% 0%' },
           '100%': { backgroundPosition: '0% 100%' },
         },
+        'cloud-drift': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        'sunray': {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '0.8' },
+        },
+        'mist-rise': {
+          '0%, 100%': { transform: 'translateY(0)', opacity: '0.3' },
+          '50%': { transform: 'translateY(-10px)', opacity: '0.6' },
+        },
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
         sway: 'sway 3s ease-in-out infinite',
-        'farmer-walk': 'farmer-walk 20s linear infinite',
+        'tractor-move': 'tractor-move 20s linear infinite',
         flow: 'flow 2s linear infinite',
+        'cloud-drift': 'cloud-drift 30s linear infinite',
+        'sunray': 'sunray 4s ease-in-out infinite',
+        'mist-rise': 'mist-rise 3s ease-in-out infinite',
       },
       colors: {
         primary: {

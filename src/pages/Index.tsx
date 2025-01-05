@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ImageUpload } from "@/components/ImageUpload";
 import { FarmerForm, FarmerData } from "@/components/FarmerForm";
 import { DiseaseAnalysis } from "@/components/DiseaseAnalysis";
-import { Leaf, Shield, Zap, ArrowRight } from "lucide-react";
+import { Leaf, Shield, Zap, ArrowRight, Github } from "lucide-react";
 import { useState } from "react";
 import AnimatedBackground from "@/components/AnimatedBackground";
 
@@ -51,24 +51,24 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-green-50 to-white">
+    <div className="min-h-screen relative overflow-hidden">
       <AnimatedBackground />
       <Navigation />
       
-      <div className="container mx-auto px-4 pt-20 flex-grow">
+      <div className="container mx-auto px-4 relative">
         {step === 1 && (
           <>
-            <section className="py-16">
+            <section className="pt-32 pb-16">
               <div className="text-center animate-fade-up">
-                <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent mb-6">
                   AI-Powered Crop Health Analysis
                 </h1>
-                <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto backdrop-blur-sm bg-white/30 p-4 rounded-lg">
                   We empower Indian farmers with AI tools to improve crop health using technology
                 </p>
                 <Button 
                   size="lg" 
-                  className="bg-primary hover:bg-primary-dark"
+                  className="bg-primary hover:bg-primary-dark transform hover:scale-105 transition-all duration-300"
                   onClick={handleGetStarted}
                 >
                   Get Started <ArrowRight className="ml-2" />
@@ -77,10 +77,16 @@ export default function Index() {
             </section>
 
             <section className="py-16">
-              <h2 className="text-3xl font-bold text-center mb-12">Our Features</h2>
+              <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
+                Our Features
+              </h2>
               <div className="grid md:grid-cols-3 gap-8">
                 {features.map((feature, index) => (
-                  <Card key={index} className="p-6 hover:shadow-lg transition-shadow animate-fade-up" style={{ animationDelay: `${index * 100}ms` }}>
+                  <Card 
+                    key={index} 
+                    className="backdrop-blur-sm bg-white/80 border-t border-l border-white/20 hover:shadow-lg transition-all duration-300 transform hover:scale-105 animate-fade-up" 
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
                     <CardContent className="pt-6">
                       <feature.icon className="w-12 h-12 text-primary mb-4" />
                       <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
@@ -93,7 +99,7 @@ export default function Index() {
           </>
         )}
         {step === 2 && (
-          <section className="py-16">
+          <section className="pt-32 pb-16">
             <div className="container mx-auto max-w-2xl">
               <FarmerForm 
                 onBack={() => setStep(1)}
@@ -103,7 +109,7 @@ export default function Index() {
           </section>
         )}
         {step === 3 && farmerData && (
-          <section className="py-16">
+          <section className="pt-32 pb-16">
             <div className="container mx-auto max-w-2xl">
               <ImageUpload 
                 onBack={() => setStep(2)}
@@ -114,7 +120,7 @@ export default function Index() {
           </section>
         )}
         {step === 4 && farmerData && imageUrl && (
-          <section className="py-16">
+          <section className="pt-32 pb-16">
             <div className="container mx-auto max-w-2xl">
               <DiseaseAnalysis
                 onBack={() => setStep(3)}
@@ -127,6 +133,23 @@ export default function Index() {
           </section>
         )}
       </div>
+
+      <footer className="bg-white/80 backdrop-blur-sm border-t py-8 mt-auto relative">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-gray-600">
+            Designed and Developed by Dhadi Sai Praneeth Reddy |{" "}
+            <a
+              href="https://github.com/dspraneeth07"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary-dark inline-flex items-center"
+            >
+              <Github className="w-5 h-5" />
+              <span className="sr-only">GitHub Profile</span>
+            </a>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
