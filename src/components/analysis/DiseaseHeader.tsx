@@ -1,4 +1,4 @@
-import { Virus } from "lucide-react";
+import { Bug } from "lucide-react";
 
 interface DiseaseHeaderProps {
   diseaseName: string;
@@ -9,7 +9,7 @@ export function DiseaseHeader({ diseaseName, confidence }: DiseaseHeaderProps) {
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2">
-        <Virus className="w-6 h-6 text-warning animate-pulse" />
+        <Bug className="w-6 h-6 text-warning animate-pulse" />
         <h3 className="font-semibold text-lg">{diseaseName}</h3>
       </div>
       <div className="flex items-center gap-2">
