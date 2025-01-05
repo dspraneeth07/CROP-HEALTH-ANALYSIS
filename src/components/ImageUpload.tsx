@@ -16,6 +16,7 @@ export function ImageUpload({ onBack, onAnalyze, cropType }: ImageUploadProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +28,10 @@ export function ImageUpload({ onBack, onAnalyze, cropType }: ImageUploadProps) {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
   };
 
   const startCamera = async () => {
@@ -148,17 +153,13 @@ export function ImageUpload({ onBack, onAnalyze, cropType }: ImageUploadProps) {
                   onChange={handleImageUpload}
                   className="hidden"
                   id="image-upload"
+                  ref={fileInputRef}
                 />
                 <div className="flex gap-4">
-                  <label
-                    htmlFor="image-upload"
-                    className="cursor-pointer"
-                  >
-                    <Button>
-                      <Upload className="mr-2" />
-                      Upload Image
-                    </Button>
-                  </label>
+                  <Button onClick={handleUploadClick}>
+                    <Upload className="mr-2" />
+                    Upload Image
+                  </Button>
                   <Button variant="outline" onClick={startCamera}>
                     <Camera className="mr-2" />
                     Take Photo
