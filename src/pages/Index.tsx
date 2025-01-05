@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ImageUpload } from "@/components/ImageUpload";
 import { FarmerForm, FarmerData } from "@/components/FarmerForm";
 import { DiseaseAnalysis } from "@/components/DiseaseAnalysis";
-import { Leaf, Shield, Zap, ArrowRight } from "lucide-react";
+import { Leaf, Shield, Zap, ArrowRight, Github } from "lucide-react";
 import { useState } from "react";
 
 const features = [
@@ -115,7 +115,6 @@ const Index = () => {
             </section>
           </>
         )}
-
         {step === 2 && (
           <section className="pt-32 pb-16">
             <div className="container mx-auto max-w-2xl">
@@ -126,7 +125,6 @@ const Index = () => {
             </div>
           </section>
         )}
-
         {step === 3 && (
           <section className="pt-32 pb-16">
             <div className="container mx-auto max-w-2xl">
@@ -137,7 +135,6 @@ const Index = () => {
             </div>
           </section>
         )}
-
         {step === 4 && (
           <section className="pt-32 pb-16">
             <div className="container mx-auto max-w-2xl">
@@ -159,9 +156,10 @@ const Index = () => {
               href="https://github.com/dspraneeth07"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:text-primary-dark"
+              className="text-primary hover:text-primary-dark inline-flex items-center"
             >
-              GitHub: /dspraneeth07
+              <Github className="w-5 h-5" />
+              <span className="sr-only">GitHub Profile</span>
             </a>
           </p>
         </div>
