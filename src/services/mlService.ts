@@ -26,9 +26,7 @@ export const initializeModel = async (cropType: string) => {
     const modelName = CROP_MODELS[cropType.toLowerCase()] || CROP_MODELS.maize;
     
     // Initialize the classifier with image-classification task
-    classifier = await pipeline("image-classification", modelName, {
-      quantized: false, // Use non-quantized model for better accuracy
-    });
+    classifier = await pipeline("image-classification", modelName);
     
     console.log("Model initialized successfully");
     return true;
@@ -55,7 +53,7 @@ export const analyzeImage = async (imageUrl: string) => {
     }
 
     const results = await classifier(imageInput, {
-      topk: 5, // Return top 5 predictions
+      topk: 5 // Return top 5 predictions
     });
     
     console.log("Analysis results:", results);
