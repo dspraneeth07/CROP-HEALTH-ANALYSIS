@@ -1,7 +1,9 @@
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Leaf, Shield, Zap } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ImageUpload } from "@/components/ImageUpload";
+import { Leaf, Shield, Zap, ArrowRight } from "lucide-react";
+import { useState } from "react";
 
 const features = [
   {
@@ -22,43 +24,68 @@ const features = [
 ];
 
 const Index = () => {
+  const [step, setStep] = useState(1);
+
+  const handleGetStarted = () => {
+    setStep(2);
+    console.log("Moving to step 2: Image Upload");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <Navigation />
       
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 px-4">
-        <div className="container mx-auto text-center animate-fade-up">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            AI-Powered Crop Health Analysis
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            We empower Indian farmers with AI tools to improve crop health using technology
-          </p>
-          <Button size="lg" className="bg-primary hover:bg-primary-dark">
-            Get Started
-          </Button>
-        </div>
-      </section>
+      {step === 1 && (
+        <>
+          {/* Hero Section */}
+          <section className="pt-32 pb-16 px-4">
+            <div className="container mx-auto text-center animate-fade-up">
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                AI-Powered Crop Health Analysis
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                We empower Indian farmers with AI tools to improve crop health using technology
+              </p>
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary-dark"
+                onClick={handleGetStarted}
+              >
+                Get Started <ArrowRight className="ml-2" />
+              </Button>
+            </div>
+          </section>
 
-      {/* Features Section */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Our Features</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="p-6 hover:shadow-lg transition-shadow animate-fade-up" style={{ animationDelay: `${index * 100}ms` }}>
-                <feature.icon className="w-12 h-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </Card>
-            ))}
+          {/* Features Section */}
+          <section className="py-16 px-4">
+            <div className="container mx-auto">
+              <h2 className="text-3xl font-bold text-center mb-12">Our Features</h2>
+              <div className="grid md:grid-cols-3 gap-8">
+                {features.map((feature, index) => (
+                  <Card key={index} className="p-6 hover:shadow-lg transition-shadow animate-fade-up" style={{ animationDelay: `${index * 100}ms` }}>
+                    <CardContent className="pt-6">
+                      <feature.icon className="w-12 h-12 text-primary mb-4" />
+                      <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                      <p className="text-gray-600">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
+      {step === 2 && (
+        <section className="pt-32 pb-16 px-4">
+          <div className="container mx-auto max-w-2xl">
+            <ImageUpload onBack={() => setStep(1)} />
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Footer */}
-      <footer className="bg-white border-t py-8">
+      <footer className="bg-white border-t py-8 mt-auto">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-600">
             Designed and Developed by Dhadi Sai Praneeth Reddy |{" "}
