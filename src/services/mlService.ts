@@ -3,21 +3,21 @@ import { pipeline } from "@huggingface/transformers";
 let classifier: any = null;
 
 const CROP_MODELS: { [key: string]: string } = {
-  maize: "google/vit-base-patch16-224-in21k",
-  rice: "google/vit-base-patch16-224-in21k",
-  wheat: "google/vit-base-patch16-224-in21k",
-  cotton: "google/vit-base-patch16-224-in21k",
-  sugarcane: "google/vit-base-patch16-224-in21k",
-  tomatoes: "google/vit-base-patch16-224-in21k",
-  chili: "google/vit-base-patch16-224-in21k",
-  bananas: "google/vit-base-patch16-224-in21k",
-  coconut: "google/vit-base-patch16-224-in21k",
-  groundnut: "google/vit-base-patch16-224-in21k",
-  soybean: "google/vit-base-patch16-224-in21k",
-  brinjal: "google/vit-base-patch16-224-in21k",
-  beans: "google/vit-base-patch16-224-in21k",
-  turmeric: "google/vit-base-patch16-224-in21k",
-  ginger: "google/vit-base-patch16-224-in21k"
+  maize: "microsoft/resnet-50",
+  rice: "microsoft/resnet-50",
+  wheat: "microsoft/resnet-50",
+  cotton: "microsoft/resnet-50",
+  sugarcane: "microsoft/resnet-50",
+  tomatoes: "microsoft/resnet-50",
+  chili: "microsoft/resnet-50",
+  bananas: "microsoft/resnet-50",
+  coconut: "microsoft/resnet-50",
+  groundnut: "microsoft/resnet-50",
+  soybean: "microsoft/resnet-50",
+  brinjal: "microsoft/resnet-50",
+  beans: "microsoft/resnet-50",
+  turmeric: "microsoft/resnet-50",
+  ginger: "microsoft/resnet-50"
 };
 
 export const initializeModel = async (cropType: string) => {
@@ -25,14 +25,16 @@ export const initializeModel = async (cropType: string) => {
     console.log(`Initializing model for ${cropType}`);
     const modelName = CROP_MODELS[cropType.toLowerCase()] || CROP_MODELS.maize;
     
-    // Initialize the classifier with image-classification task
-    classifier = await pipeline("image-classification", modelName);
+    classifier = await pipeline("image-classification", modelName, {
+      revision: "main",
+      framework: "onnx"
+    });
     
     console.log("Model initialized successfully");
     return true;
   } catch (error) {
     console.error("Error initializing model:", error);
-    throw error; // Propagate error to handle it in the UI
+    throw error;
   }
 };
 
@@ -86,6 +88,6 @@ export const analyzeImage = async (imageUrl: string) => {
     };
   } catch (error) {
     console.error("Error analyzing image:", error);
-    throw error; // Propagate error to handle it in the UI
+    throw error;
   }
 };
