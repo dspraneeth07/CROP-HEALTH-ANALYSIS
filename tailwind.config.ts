@@ -18,45 +18,6 @@ export default {
       },
     },
     extend: {
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
-          '50%': { transform: 'translateY(-20px) rotate(180deg)' },
-        },
-        sway: {
-          '0%, 100%': { transform: 'rotate(-5deg)' },
-          '50%': { transform: 'rotate(5deg)' },
-        },
-        'tractor-move': {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(400%)' },
-        },
-        flow: {
-          '0%': { backgroundPosition: '0% 0%' },
-          '100%': { backgroundPosition: '0% 100%' },
-        },
-        'cloud-drift': {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(100%)' },
-        },
-        'sunray': {
-          '0%, 100%': { opacity: '0.4' },
-          '50%': { opacity: '0.8' },
-        },
-        'mist-rise': {
-          '0%, 100%': { transform: 'translateY(0)', opacity: '0.3' },
-          '50%': { transform: 'translateY(-10px)', opacity: '0.6' },
-        },
-      },
-      animation: {
-        float: 'float 6s ease-in-out infinite',
-        sway: 'sway 3s ease-in-out infinite',
-        'tractor-move': 'tractor-move 20s linear infinite',
-        flow: 'flow 2s linear infinite',
-        'cloud-drift': 'cloud-drift 30s linear infinite',
-        'sunray': 'sunray 4s ease-in-out infinite',
-        'mist-rise': 'mist-rise 3s ease-in-out infinite',
-      },
       colors: {
         primary: {
           DEFAULT: "#4CAF50",
@@ -98,6 +59,30 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+      },
+      keyframes: {
+        "fade-up": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+      },
+      animation: {
+        "fade-up": "fade-up 0.5s ease-out",
+        "fade-in": "fade-in 0.5s ease-out",
       },
     },
   },
