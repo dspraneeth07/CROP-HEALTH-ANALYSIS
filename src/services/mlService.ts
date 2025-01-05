@@ -53,7 +53,8 @@ export const initializeModel = async (cropType: string) => {
     }
     
     classifier = await pipeline("image-classification", modelName, {
-      quantized: false // Disable quantization to ensure better compatibility
+      revision: "main",
+      framework: "onnx"
     });
     
     console.log("Model initialized successfully");
