@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, ArrowLeft, Leaf, AlertCircle, CheckCircle, XCircle, Sprout, Shield, Pill } from "lucide-react";
+import { Download, ArrowLeft, Sprout } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
+import { DiseaseHeader } from "./analysis/DiseaseHeader";
+import { DiseaseStatus } from "./analysis/DiseaseStatus";
+import { DiseaseTreatment } from "./analysis/DiseaseTreatment";
 
 interface DiseaseAnalysisProps {
   onBack: () => void;
@@ -116,32 +119,6 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
     );
   }
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "severe":
-        return <XCircle className="w-6 h-6 text-red-500 animate-pulse" />;
-      case "moderate":
-        return <AlertCircle className="w-6 h-6 text-yellow-500 animate-bounce" />;
-      case "healthy":
-        return <CheckCircle className="w-6 h-6 text-green-500 animate-bounce" />;
-      default:
-        return null;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "severe":
-        return "text-red-500";
-      case "moderate":
-        return "text-yellow-500";
-      case "healthy":
-        return "text-green-500";
-      default:
-        return "text-gray-500";
-    }
-  };
-
   return (
     <Card className="w-full animate-fade-up">
       <CardHeader>
@@ -158,77 +135,29 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
         )}
         
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Leaf className="w-6 h-6 text-primary animate-bounce" />
-              <h3 className="font-semibold text-lg">{analysisData.diseaseName}</h3>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500">Confidence:</span>
-              <span className="font-medium">{analysisData.confidence}%</span>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500">Status:</span>
-              {getStatusIcon(analysisData.status)}
-              <span className={`font-medium ${getStatusColor(analysisData.status)}`}>
-                {analysisData.status.charAt(0).toUpperCase() + analysisData.status.slice(1)}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500">Affected Area:</span>
-              <span className="font-medium">{analysisData.affectedArea}%</span>
-            </div>
+          <DiseaseHeader 
+            diseaseName={analysisData.diseaseName}
+            confidence={analysisData.confidence}
+          />
+          <DiseaseStatus 
+            status={analysisData.status}
+            affectedArea={analysisData.affectedArea}
+          />
+        </div>
+
+        <div className="flex items-start gap-2">
+          <Sprout className="w-6 h-6 text-primary animate-bounce mt-1" />
+          <div>
+            <h4 className="font-semibold mb-2">Description</h4>
+            <p className="text-gray-600">{analysisData.description}</p>
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="flex items-start gap-2">
-            <Sprout className="w-6 h-6 text-primary animate-bounce mt-1" />
-            <div>
-              <h4 className="font-semibold mb-2">Description</h4>
-              <p className="text-gray-600">{analysisData.description}</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2">
-            <AlertCircle className="w-6 h-6 text-yellow-500 animate-pulse mt-1" />
-            <div>
-              <h4 className="font-semibold mb-2">Causes</h4>
-              <ul className="list-disc pl-5 space-y-1">
-                {analysisData.causes.map((cause, index) => (
-                  <li key={index} className="text-gray-600">{cause}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2">
-            <Shield className="w-6 h-6 text-blue-500 animate-pulse mt-1" />
-            <div>
-              <h4 className="font-semibold mb-2">Prevention Steps</h4>
-              <ul className="list-disc pl-5 space-y-1">
-                {analysisData.prevention.map((step, index) => (
-                  <li key={index} className="text-gray-600">{step}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2">
-            <Pill className="w-6 h-6 text-green-500 animate-pulse mt-1" />
-            <div>
-              <h4 className="font-semibold mb-2">Treatment Recommendations</h4>
-              <div className="space-y-2">
-                <p><span className="font-medium">Medicine:</span> {analysisData.treatment.medicine}</p>
-                <p><span className="font-medium">Dosage:</span> {analysisData.treatment.dosage}</p>
-                <p><span className="font-medium">Frequency:</span> {analysisData.treatment.frequency}</p>
-                <p><span className="font-medium">Instructions:</span> {analysisData.treatment.instructions}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <DiseaseTreatment 
+          causes={analysisData.causes}
+          prevention={analysisData.prevention}
+          treatment={analysisData.treatment}
+        />
 
         <div className="flex justify-end mt-6">
           <Button onClick={handleDownloadPDF}>

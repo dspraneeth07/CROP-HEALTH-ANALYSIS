@@ -3,10 +3,10 @@ import { pipeline } from "@huggingface/transformers";
 let classifier: any = null;
 
 const CROP_MODELS: { [key: string]: string } = {
-  maize: "Xenova/resnet-50",
-  rice: "Xenova/resnet-50",
-  wheat: "Xenova/resnet-50",
-  cotton: "Xenova/resnet-50",
+  maize: "Xenova/crop-disease-maize",
+  rice: "Xenova/crop-disease-rice",
+  wheat: "Xenova/crop-disease-wheat",
+  cotton: "Xenova/crop-disease-cotton",
   sugarcane: "Xenova/resnet-50",
   tomatoes: "Xenova/resnet-50",
   chili: "Xenova/resnet-50",
@@ -20,14 +20,28 @@ const CROP_MODELS: { [key: string]: string } = {
   ginger: "Xenova/resnet-50"
 };
 
+const DISEASE_TREATMENTS: { [key: string]: any } = {
+  "leaf_blight": {
+    medicine: "Propiconazole",
+    dosage: "1.5-2 ml per liter of water",
+    frequency: "Every 14 days, maximum 3 applications",
+    instructions: "Apply early morning or late evening. Ensure complete leaf coverage."
+  },
+  "blast": {
+    medicine: "Tricyclazole",
+    dosage: "0.6g per liter of water",
+    frequency: "Every 10-14 days during disease pressure",
+    instructions: "Apply preventively when conditions favor disease development."
+  },
+  // Add more disease treatments as needed
+};
+
 export const initializeModel = async (cropType: string) => {
   try {
     console.log(`Initializing model for ${cropType}`);
-    const modelName = CROP_MODELS[cropType.toLowerCase()] || CROP_MODELS.maize;
+    const modelName = CROP_MODELS[cropType.toLowerCase()] || "Xenova/resnet-50";
     
-    classifier = await pipeline("image-classification", modelName, {
-      revision: "main"
-    });
+    classifier = await pipeline("image-classification", modelName);
     
     console.log("Model initialized successfully");
     return true;
@@ -45,47 +59,44 @@ export const analyzeImage = async (imageUrl: string) => {
   try {
     console.log("Starting image analysis...");
     
-    let imageInput = imageUrl;
-    if (imageUrl.startsWith('data:image')) {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      imageInput = URL.createObjectURL(blob);
-    }
-
-    const results = await classifier(imageInput, {
+    const results = await classifier(imageUrl, {
       topk: 5
     });
     
     console.log("Analysis results:", results);
 
-    // Map the model results to our application's format
-    const confidence = Math.round(results[0].score * 100);
-    const status = confidence > 70 ? "severe" : confidence > 40 ? "moderate" : "healthy";
+    const primaryResult = results[0];
+    const confidence = Math.round(primaryResult.score * 100);
+    const diseaseName = primaryResult.label.replace(/_/g, ' ');
     
+    // Get treatment recommendations
+    const treatment = DISEASE_TREATMENTS[primaryResult.label] || {
+      medicine: "Consult local agricultural expert",
+      dosage: "As prescribed",
+      frequency: "As recommended",
+      instructions: "Please consult with a local agricultural expert for specific treatment guidelines"
+    };
+
     return {
-      diseaseName: results[0].label,
+      diseaseName,
       confidence,
-      description: `Analysis based on visual symptoms detected in the image. Confidence level: ${confidence}%`,
-      affectedArea: Math.round(results[0].score * 100),
-      normalRange: "0-5%",
-      status,
+      description: `Detected ${diseaseName} with ${confidence}% confidence. This analysis is based on visual symptoms and machine learning model predictions.`,
+      affectedArea: Math.round(primaryResult.score * 80), // Estimate affected area
+      status: confidence > 70 ? "severe" : confidence > 40 ? "moderate" : "healthy",
       causes: [
-        "Environmental stress",
+        "Environmental stress conditions",
         "Pathogenic infection",
-        "Nutrient deficiency"
+        "Poor plant nutrition",
+        "Weather conditions favorable for disease"
       ],
       prevention: [
-        "Regular monitoring",
-        "Proper irrigation",
-        "Balanced fertilization",
-        "Crop rotation"
+        "Regular crop monitoring",
+        "Maintain proper plant spacing",
+        "Use disease-resistant varieties",
+        "Practice crop rotation",
+        "Ensure proper drainage"
       ],
-      treatment: {
-        medicine: "Consult local agricultural expert for specific treatment",
-        dosage: "As prescribed",
-        frequency: "As needed",
-        instructions: "Follow local agricultural extension service guidelines"
-      }
+      treatment
     };
   } catch (error) {
     console.error("Error analyzing image:", error);
