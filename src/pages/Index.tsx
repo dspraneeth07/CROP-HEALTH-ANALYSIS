@@ -126,22 +126,66 @@ export default function Index() {
         )}
       </div>
 
-      <footer className="bg-white border-t py-8 mt-auto">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-600">
-            Designed and Developed by Dhadi Sai Praneeth Reddy |{" "}
-            <a
-              href="https://github.com/dspraneeth07"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:text-primary-dark inline-flex items-center"
-            >
-              <Github className="w-5 h-5" />
-              <span className="sr-only">GitHub Profile</span>
-            </a>
-          </p>
-        </div>
-      </footer>
+<footer className="bg-white border-t py-8 mt-auto">
+  <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+    {/* Left Section: Xpedition R Branding */}
+    <div className="text-left">
+      <h2 className="text-green-600 font-bold text-xl">XPEDITION R</h2>
+      <p className="text-gray-600 mt-2">
+        Empowering research and innovation for a better tomorrow.
+      </p>
+    </div>
+
+    {/* Center Section: Team Members */}
+    <div className="text-center">
+      <h3 className="text-gray-800 font-semibold text-lg">Team</h3>
+      <ul className="text-gray-600 mt-2">
+        <li>Dhadi Sai Praneeth Reddy</li>
+        <li>Kasireddy Manideep Reddy</li>
+        <li>Baggari Sahasra Reddy</li>
+        <li>Kora Tanishka</li>
+      </ul>
+      <a
+        href="/about-us"
+        className="text-primary hover:text-primary-dark font-medium mt-2 block"
+      >
+        Learn more about our team
+      </a>
+    </div>
+
+    {/* Right Section: Made in India & Copyright */}
+    <div className="text-right">
+      <p className="text-gray-600">🇮🇳 Made in India</p>
+      <p className="text-gray-600 mt-2">
+        Copyright © <a
+          href="https://www.researchgate.net/lab/XPEDITION-R-RESEARCH-GROUP-Sai-Praneeth-Reddy-Dhadi"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary hover:text-primary-dark"
+        >
+          Xpedition R Research Group
+        </a>
+      </p>
+    </div>
+  </div>
+
+  {/* Bottom Section: Credits */}
+  <div className="mt-8 border-t pt-4 text-center">
+    <p className="text-gray-600">
+      Designed and Developed by Dhadi Sai Praneeth Reddy |{" "}
+      <a
+        href="https://github.com/dspraneeth07"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-primary hover:text-primary-dark inline-flex items-center"
+      >
+        <Github className="w-5 h-5" />
+        <span className="sr-only">GitHub Profile</span>
+      </a>
+    </p>
+  </div>
+</footer>
+
     </div>
   );
 }
