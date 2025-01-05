@@ -29,7 +29,7 @@ interface DiseaseAnalysisProps {
   };
 }
 
-export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: DiseaseAnalysisProps) {
+export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData, farmerData }: DiseaseAnalysisProps) {
   const { toast } = useToast();
 
   const handleDownloadPDF = () => {
@@ -68,20 +68,86 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
     pdf.text(`Crop Disease Analysis Report - ${cropType}`, pdf.internal.pageSize.width / 2, yPos, { align: "center" });
     yPos += 25;
 
+    // Add user details table
+    pdf.setFillColor(245, 247, 250);
+    pdf.setDrawColor(76, 175, 80);
+    pdf.setLineWidth(0.1);
+
+    const tableData = [
+      ["Farmer Details", ""],
+      ["Name", farmerData?.name || "N/A"],
+      ["Location", farmerData?.location || "N/A"],
+      ["Phone", farmerData?.phone || "N/A"],
+      ["Email", farmerData?.email || "N/A"],
+      ["Crop Type", cropType || "N/A"]
+    ];
+
+    // Calculate table dimensions
+    const cellPadding = 5;
+    const columnWidth = 80;
+    const rowHeight = 10;
+    const startX = (pdf.internal.pageSize.width - (columnWidth * 2)) / 2;
+
+    // Draw table
+    tableData.forEach((row, i) => {
+      // Header row styling
+      if (i === 0) {
+        pdf.setFillColor(76, 175, 80);
+        pdf.setTextColor(255, 255, 255);
+      } else {
+        pdf.setFillColor(i % 2 === 0 ? 245 : 255, 247, 250);
+        pdf.setTextColor(33, 33, 33);
+      }
+
+      // Draw cells
+      row.forEach((cell, j) => {
+        pdf.rect(startX + (j * columnWidth), yPos, columnWidth, rowHeight, 'F');
+        pdf.rect(startX + (j * columnWidth), yPos, columnWidth, rowHeight, 'S');
+        pdf.text(cell, startX + (j * columnWidth) + cellPadding, yPos + 7);
+      });
+      yPos += rowHeight;
+    });
+
+    yPos += 15;
+
     // Add the uploaded image
     if (imageUrl) {
       const imgWidth = 100;
       const imgHeight = 75;
+      
+      // Check if we need to add a new page before the image
+      if (yPos + imgHeight > pdf.internal.pageSize.height - 20) {
+        pdf.addPage();
+        yPos = 20;
+        // Add border to the new page
+        pdf.rect(10, 10, pdf.internal.pageSize.width - 20, pdf.internal.pageSize.height - 20);
+      }
+      
       pdf.addImage(imageUrl, 'JPEG', (pdf.internal.pageSize.width - imgWidth) / 2, yPos, imgWidth, imgHeight);
       yPos += imgHeight + 15;
     }
+
+    // Function to check and add new page if needed
+    const checkAndAddNewPage = (requiredSpace: number) => {
+      if (yPos + requiredSpace > pdf.internal.pageSize.height - 20) {
+        pdf.addPage();
+        yPos = 20;
+        // Add border to the new page
+        pdf.rect(10, 10, pdf.internal.pageSize.width - 20, pdf.internal.pageSize.height - 20);
+        return true;
+      }
+      return false;
+    };
 
     // Disease information section with custom bullet points and icons
     pdf.setTextColor(33, 33, 33);
     pdf.setFontSize(16);
     pdf.setFont("helvetica", "bold");
+
+    // Check space for disease information
+    checkAndAddNewPage(100);
     
-    // Disease name and confidence with Bug icon
+    // Disease name and confidence
     pdf.setFillColor(76, 175, 80);
     pdf.circle(20, yPos - 2, 2, 'F');
     pdf.text("Disease Information", 25, yPos);
@@ -89,12 +155,27 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
 
     pdf.setFontSize(12);
     pdf.setFont("helvetica", "normal");
+    const maxWidth = pdf.internal.pageSize.width - 40; // 20px margin on each side
+
+    // Function to add wrapped text
+    const addWrappedText = (text: string, startY: number) => {
+      const lines = pdf.splitTextToSize(text, maxWidth);
+      lines.forEach((line: string) => {
+        checkAndAddNewPage(7);
+        pdf.text(line, 25, yPos);
+        yPos += 7;
+      });
+      return lines.length * 7;
+    };
+
+    // Add disease details with proper text wrapping
     pdf.text(`Disease: ${analysisData.diseaseName}`, 25, yPos);
     yPos += 8;
     pdf.text(`Confidence: ${analysisData.confidence}%`, 25, yPos);
     yPos += 15;
 
-    // Status with color coding and icon
+    // Status section
+    checkAndAddNewPage(50);
     const statusColor = {
       severe: "#FF5252",
       moderate: "#FFC107",
@@ -111,7 +192,8 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
     pdf.text(`Affected Area: ${analysisData.affectedArea}%`, 25, yPos);
     yPos += 15;
 
-    // Description section with Info icon
+    // Description section
+    checkAndAddNewPage(50);
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "bold");
     pdf.setFillColor(64, 159, 255);
@@ -121,11 +203,11 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
     
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(12);
-    const descriptionLines = pdf.splitTextToSize(analysisData.description, 160);
-    pdf.text(descriptionLines, 25, yPos);
-    yPos += descriptionLines.length * 7 + 10;
+    addWrappedText(analysisData.description, yPos);
+    yPos += 10;
 
-    // Causes section with Warning icon
+    // Causes section
+    checkAndAddNewPage(50);
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "bold");
     pdf.setFillColor(255, 152, 0);
@@ -136,14 +218,15 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(12);
     analysisData.causes.forEach(cause => {
+      checkAndAddNewPage(10);
       pdf.setFillColor(255, 152, 0);
       pdf.circle(25, yPos - 2, 1, 'F');
-      pdf.text(cause, 30, yPos);
-      yPos += 8;
+      addWrappedText(cause, yPos);
     });
     yPos += 10;
 
-    // Prevention section with Shield icon
+    // Prevention section
+    checkAndAddNewPage(50);
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "bold");
     pdf.setFillColor(0, 200, 83);
@@ -154,14 +237,15 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(12);
     analysisData.prevention.forEach(step => {
+      checkAndAddNewPage(10);
       pdf.setFillColor(0, 200, 83);
       pdf.circle(25, yPos - 2, 1, 'F');
-      pdf.text(step, 30, yPos);
-      yPos += 8;
+      addWrappedText(step, yPos);
     });
     yPos += 10;
 
-    // Treatment section with multiple colored icons
+    // Treatment section
+    checkAndAddNewPage(50);
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "bold");
     pdf.setFillColor(156, 39, 176);
@@ -174,35 +258,38 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
 
     // Treatment details with custom colored bullets
     const treatment = analysisData.treatment;
+    checkAndAddNewPage(40);
+    
     pdf.setFillColor(233, 30, 99);
     pdf.circle(25, yPos - 2, 1, 'F');
-    pdf.text(`Medicine: ${treatment.medicine}`, 30, yPos);
-    yPos += 8;
+    addWrappedText(`Medicine: ${treatment.medicine}`, yPos);
     
     pdf.setFillColor(3, 169, 244);
     pdf.circle(25, yPos - 2, 1, 'F');
-    pdf.text(`Dosage: ${treatment.dosage}`, 30, yPos);
-    yPos += 8;
+    addWrappedText(`Dosage: ${treatment.dosage}`, yPos);
     
     pdf.setFillColor(255, 193, 7);
     pdf.circle(25, yPos - 2, 1, 'F');
-    pdf.text(`Frequency: ${treatment.frequency}`, 30, yPos);
-    yPos += 8;
+    addWrappedText(`Frequency: ${treatment.frequency}`, yPos);
     
     pdf.setFillColor(76, 175, 80);
     pdf.circle(25, yPos - 2, 1, 'F');
-    pdf.text(`Instructions: ${treatment.instructions}`, 30, yPos);
+    addWrappedText(`Instructions: ${treatment.instructions}`, yPos);
 
-    // Add watermark
-    pdf.setFont("helvetica", "italic");
-    pdf.setFontSize(12);
-    pdf.setTextColor(200, 200, 200);
-    pdf.text(
-      "Xpedition R Crop Health",
-      pdf.internal.pageSize.width - 20,
-      pdf.internal.pageSize.height - 10,
-      { align: "right" }
-    );
+    // Add watermark on each page
+    const totalPages = pdf.internal.getNumberOfPages();
+    for(let i = 1; i <= totalPages; i++) {
+      pdf.setPage(i);
+      pdf.setFont("helvetica", "italic");
+      pdf.setFontSize(12);
+      pdf.setTextColor(200, 200, 200);
+      pdf.text(
+        "Xpedition R Crop Health",
+        pdf.internal.pageSize.width - 20,
+        pdf.internal.pageSize.height - 10,
+        { align: "right" }
+      );
+    }
 
     // Save the PDF
     pdf.save(`crop-analysis-${cropType}-${Date.now()}.pdf`);
