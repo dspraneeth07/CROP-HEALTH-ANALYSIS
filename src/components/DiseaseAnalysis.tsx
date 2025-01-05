@@ -48,10 +48,16 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
     pdf.setFontSize(28);
     pdf.setTextColor(76, 175, 80);
     pdf.setFont("helvetica", "bold");
+    
+    // Draw the title text twice for a bold effect
     pdf.text("Xpedition R", pdf.internal.pageSize.width / 2, yPos, { 
       align: "center",
-      renderingMode: "fillThenStroke",
-      strokeWidth: 0.7
+      renderingMode: "fill"
+    });
+    pdf.setTextColor(0, 100, 0); // Darker green for stroke
+    pdf.text("Xpedition R", pdf.internal.pageSize.width / 2, yPos, { 
+      align: "center",
+      renderingMode: "stroke"
     });
     yPos += 20;
 
