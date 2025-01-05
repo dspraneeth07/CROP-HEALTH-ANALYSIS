@@ -133,6 +133,7 @@ const Index = () => {
               <ImageUpload 
                 onBack={() => setStep(2)}
                 onAnalyze={handleImageAnalyzed}
+                cropType={farmerData?.cropType || "Unknown"}
               />
             </div>
           </section>
@@ -143,6 +144,7 @@ const Index = () => {
             <div className="container mx-auto max-w-2xl">
               <DiseaseAnalysis
                 onBack={() => setStep(3)}
+                cropType={farmerData?.cropType}
                 analysisData={mockAnalysisData}
               />
             </div>

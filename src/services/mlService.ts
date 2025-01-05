@@ -6,8 +6,7 @@ export const initializeML = async () => {
   try {
     classifier = await pipeline(
       "image-classification",
-      "Xenova/crop-disease-detection",
-      { quantized: true }
+      "Xenova/crop-disease-detection"
     );
     console.log("ML model initialized successfully");
   } catch (error) {
