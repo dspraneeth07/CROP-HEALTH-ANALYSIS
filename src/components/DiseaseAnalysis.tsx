@@ -16,7 +16,7 @@ interface DiseaseAnalysisProps {
   analysisData?: AnalysisData;
 }
 
-export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData, farmerData }: DiseaseAnalysisProps) {
+export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: DiseaseAnalysisProps) {
   const { toast } = useToast();
 
   const handleDownloadPDF = async () => {
@@ -30,24 +30,10 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData, farm
         return;
       }
 
-      if (!farmerData) {
-        toast({
-          title: "Error",
-          description: "Farmer data is required for PDF generation",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      console.log("Generating PDF with data:", { 
-        cropType, 
-        imageUrl, 
-        farmerData, 
-        analysisData 
-      });
+      console.log("Generating PDF with data:", { cropType, imageUrl, analysisData });
       
-      const pdf = await generatePDF(cropType, imageUrl, farmerData, analysisData);
-      pdf.save(`crop-analysis-${farmerData.name}-${Date.now()}.pdf`);
+      const pdf = await generatePDF(cropType, imageUrl, analysisData);
+      pdf.save(`crop-analysis-${Date.now()}.pdf`);
       
       toast({
         title: "Success",
