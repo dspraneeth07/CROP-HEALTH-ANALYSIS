@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, ArrowLeft, Sprout } from "lucide-react";
+import { Download, ArrowLeft, Sprout, Bug, Shield, PillBottle, Droplet, Clock, FileText, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import { DiseaseHeader } from "./analysis/DiseaseHeader";
@@ -33,124 +33,159 @@ export function DiseaseAnalysis({ onBack, cropType, imageUrl, analysisData }: Di
   const { toast } = useToast();
 
   const handleDownloadPDF = () => {
-    if (!analysisData) return;
+    if (!analysisData || !imageUrl) return;
 
-    // Create new PDF document with custom font
+    // Create new PDF document
     const pdf = new jsPDF();
     let yPos = 20;
 
-    // Add header and logo
-    pdf.setFontSize(24);
-    pdf.setFont("helvetica", "bold");
-    pdf.setTextColor(76, 175, 80); // Primary green color
-    pdf.text("Xpedition R", pdf.internal.pageSize.width / 2, yPos, { align: "center" });
-    yPos += 15;
+    // Add border to the page
+    pdf.setDrawColor(76, 175, 80); // Primary green color
+    pdf.setLineWidth(0.5);
+    pdf.rect(10, 10, pdf.internal.pageSize.width - 20, pdf.internal.pageSize.height - 20);
 
+    // Add header with Copperplate Gothic Bold font
+    pdf.setFontSize(28);
+    pdf.setTextColor(76, 175, 80);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Xpedition R", pdf.internal.pageSize.width / 2, yPos, { 
+      align: "center",
+      renderingMode: "fillThenStroke",
+      strokeWidth: 0.7
+    });
+    yPos += 20;
+
+    // Add subtitle
     pdf.setFontSize(20);
     pdf.setTextColor(33, 33, 33);
+    pdf.setFont("helvetica", "bold");
     pdf.text(`Crop Disease Analysis Report - ${cropType}`, pdf.internal.pageSize.width / 2, yPos, { align: "center" });
     yPos += 25;
 
-    // Add user information table
-    pdf.setFontSize(12);
-    pdf.setFont("helvetica", "normal");
-    pdf.setDrawColor(200, 200, 200);
-    pdf.setFillColor(245, 245, 245);
-    
-    // Table headers style
-    pdf.setFillColor(76, 175, 80);
-    pdf.setTextColor(255, 255, 255);
-    
-    // Disease information section
-    yPos += 20;
+    // Add the uploaded image
+    if (imageUrl) {
+      const imgWidth = 100;
+      const imgHeight = 75;
+      pdf.addImage(imageUrl, 'JPEG', (pdf.internal.pageSize.width - imgWidth) / 2, yPos, imgWidth, imgHeight);
+      yPos += imgHeight + 15;
+    }
+
+    // Disease information section with custom bullet points and icons
     pdf.setTextColor(33, 33, 33);
     pdf.setFontSize(16);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Disease Information", 20, yPos);
+    
+    // Disease name and confidence with Bug icon
+    pdf.setFillColor(76, 175, 80);
+    pdf.circle(20, yPos - 2, 2, 'F');
+    pdf.text("Disease Information", 25, yPos);
     yPos += 10;
 
-    // Disease name and confidence
     pdf.setFontSize(12);
     pdf.setFont("helvetica", "normal");
-    pdf.text(`Disease: ${analysisData.diseaseName}`, 20, yPos);
+    pdf.text(`Disease: ${analysisData.diseaseName}`, 25, yPos);
     yPos += 8;
-    pdf.text(`Confidence: ${analysisData.confidence}%`, 20, yPos);
-    yPos += 8;
+    pdf.text(`Confidence: ${analysisData.confidence}%`, 25, yPos);
+    yPos += 15;
 
-    // Status with color coding
+    // Status with color coding and icon
     const statusColor = {
       severe: "#FF5252",
       moderate: "#FFC107",
       healthy: "#4CAF50"
     }[analysisData.status];
     
+    pdf.setFillColor(statusColor);
+    pdf.circle(20, yPos - 2, 2, 'F');
     pdf.setTextColor(statusColor);
-    pdf.text(`Status: ${analysisData.status.toUpperCase()}`, 20, yPos);
-    pdf.setTextColor(33, 33, 33);
+    pdf.text(`Status: ${analysisData.status.toUpperCase()}`, 25, yPos);
     yPos += 8;
-    pdf.text(`Affected Area: ${analysisData.affectedArea}%`, 20, yPos);
+    
+    pdf.setTextColor(33, 33, 33);
+    pdf.text(`Affected Area: ${analysisData.affectedArea}%`, 25, yPos);
     yPos += 15;
 
-    // Description section
+    // Description section with Info icon
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Description", 20, yPos);
+    pdf.setFillColor(64, 159, 255);
+    pdf.circle(20, yPos - 2, 2, 'F');
+    pdf.text("Description", 25, yPos);
     yPos += 8;
+    
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(12);
-    const descriptionLines = pdf.splitTextToSize(analysisData.description, 170);
-    pdf.text(descriptionLines, 20, yPos);
+    const descriptionLines = pdf.splitTextToSize(analysisData.description, 160);
+    pdf.text(descriptionLines, 25, yPos);
     yPos += descriptionLines.length * 7 + 10;
 
-    // Causes section
+    // Causes section with Warning icon
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Causes", 20, yPos);
+    pdf.setFillColor(255, 152, 0);
+    pdf.circle(20, yPos - 2, 2, 'F');
+    pdf.text("Causes", 25, yPos);
     yPos += 8;
+    
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(12);
     analysisData.causes.forEach(cause => {
-      pdf.circle(23, yPos - 2, 1, 'F');
-      pdf.text(cause, 28, yPos);
+      pdf.setFillColor(255, 152, 0);
+      pdf.circle(25, yPos - 2, 1, 'F');
+      pdf.text(cause, 30, yPos);
       yPos += 8;
     });
     yPos += 10;
 
-    // Prevention section
+    // Prevention section with Shield icon
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Prevention Steps", 20, yPos);
+    pdf.setFillColor(0, 200, 83);
+    pdf.circle(20, yPos - 2, 2, 'F');
+    pdf.text("Prevention Steps", 25, yPos);
     yPos += 8;
+    
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(12);
     analysisData.prevention.forEach(step => {
-      pdf.circle(23, yPos - 2, 1, 'F');
-      pdf.text(step, 28, yPos);
+      pdf.setFillColor(0, 200, 83);
+      pdf.circle(25, yPos - 2, 1, 'F');
+      pdf.text(step, 30, yPos);
       yPos += 8;
     });
     yPos += 10;
 
-    // Treatment section
+    // Treatment section with multiple colored icons
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Treatment Recommendations", 20, yPos);
+    pdf.setFillColor(156, 39, 176);
+    pdf.circle(20, yPos - 2, 2, 'F');
+    pdf.text("Treatment Recommendations", 25, yPos);
     yPos += 8;
+    
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(12);
 
-    // Treatment details with custom bullets
+    // Treatment details with custom colored bullets
     const treatment = analysisData.treatment;
-    pdf.circle(23, yPos - 2, 1, 'F');
-    pdf.text(`Medicine: ${treatment.medicine}`, 28, yPos);
+    pdf.setFillColor(233, 30, 99);
+    pdf.circle(25, yPos - 2, 1, 'F');
+    pdf.text(`Medicine: ${treatment.medicine}`, 30, yPos);
     yPos += 8;
-    pdf.circle(23, yPos - 2, 1, 'F');
-    pdf.text(`Dosage: ${treatment.dosage}`, 28, yPos);
+    
+    pdf.setFillColor(3, 169, 244);
+    pdf.circle(25, yPos - 2, 1, 'F');
+    pdf.text(`Dosage: ${treatment.dosage}`, 30, yPos);
     yPos += 8;
-    pdf.circle(23, yPos - 2, 1, 'F');
-    pdf.text(`Frequency: ${treatment.frequency}`, 28, yPos);
+    
+    pdf.setFillColor(255, 193, 7);
+    pdf.circle(25, yPos - 2, 1, 'F');
+    pdf.text(`Frequency: ${treatment.frequency}`, 30, yPos);
     yPos += 8;
-    pdf.circle(23, yPos - 2, 1, 'F');
-    pdf.text(`Instructions: ${treatment.instructions}`, 28, yPos);
+    
+    pdf.setFillColor(76, 175, 80);
+    pdf.circle(25, yPos - 2, 1, 'F');
+    pdf.text(`Instructions: ${treatment.instructions}`, 30, yPos);
 
     // Add watermark
     pdf.setFont("helvetica", "italic");
