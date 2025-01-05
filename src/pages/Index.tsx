@@ -139,18 +139,28 @@ export default function Index() {
     {/* Center Section: Team Members */}
     <div className="text-center">
       <h3 className="text-gray-800 font-semibold text-lg">Team</h3>
-      <ul className="text-gray-600 mt-2">
-        <li>Dhadi Sai Praneeth Reddy</li>
-        <li>Kasireddy Manideep Reddy</li>
-        <li>Baggari Sahasra Reddy</li>
-        <li>Kora Tanishka</li>
+      <div className="mt-4 grid gap-4">
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300">
+          <p className="text-gray-800 font-medium">Dhadi Sai Praneeth Reddy</p>
+        </div>
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300">
+          <p className="text-gray-800 font-medium">Kasireddy Manideep Reddy</p>
+        </div>
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300">
+          <p className="text-gray-800 font-medium">Baggari Sahasra Reddy</p>
+        </div>
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300">
+          <p className="text-gray-800 font-medium">Kora Tanishka</p>
+        </div>
+      </div>
     </div>
 
     {/* Right Section: Made in India & Copyright */}
     <div className="text-right">
       <p className="text-gray-600">🇮🇳 Made in India</p>
       <p className="text-gray-600 mt-2">
-        Copyright © <a
+        Copyright ©{" "}
+        <a
           href="https://www.researchgate.net/lab/XPEDITION-R-RESEARCH-GROUP-Sai-Praneeth-Reddy-Dhadi"
           target="_blank"
           rel="noopener noreferrer"
@@ -178,6 +188,7 @@ export default function Index() {
     </p>
   </div>
 </footer>
+
 
     </div>
   );
