@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ImageUpload } from "@/components/ImageUpload";
 import { FarmerForm, FarmerData } from "@/components/FarmerForm";
 import { DiseaseAnalysis } from "@/components/DiseaseAnalysis";
-import { Leaf, Shield, Zap, ArrowRight, Github } from "lucide-react";
+import { Leaf, Shield, Zap, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import AnimatedBackground from "@/components/AnimatedBackground";
 
@@ -51,14 +51,14 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white relative">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <AnimatedBackground />
       <Navigation />
       
-      <div className="container mx-auto px-4 relative">
+      <div className="container mx-auto px-4 pt-20">
         {step === 1 && (
           <>
-            <section className="pt-32 pb-16">
+            <section className="py-16">
               <div className="text-center animate-fade-up">
                 <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
                   AI-Powered Crop Health Analysis
@@ -93,7 +93,7 @@ export default function Index() {
           </>
         )}
         {step === 2 && (
-          <section className="pt-32 pb-16">
+          <section className="py-16">
             <div className="container mx-auto max-w-2xl">
               <FarmerForm 
                 onBack={() => setStep(1)}
@@ -103,7 +103,7 @@ export default function Index() {
           </section>
         )}
         {step === 3 && farmerData && (
-          <section className="pt-32 pb-16">
+          <section className="py-16">
             <div className="container mx-auto max-w-2xl">
               <ImageUpload 
                 onBack={() => setStep(2)}
@@ -114,7 +114,7 @@ export default function Index() {
           </section>
         )}
         {step === 4 && farmerData && imageUrl && (
-          <section className="pt-32 pb-16">
+          <section className="py-16">
             <div className="container mx-auto max-w-2xl">
               <DiseaseAnalysis
                 onBack={() => setStep(3)}
@@ -127,23 +127,6 @@ export default function Index() {
           </section>
         )}
       </div>
-
-      <footer className="bg-white border-t py-8 mt-auto relative">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-600">
-            Designed and Developed by Dhadi Sai Praneeth Reddy |{" "}
-            <a
-              href="https://github.com/dspraneeth07"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:text-primary-dark inline-flex items-center"
-            >
-              <Github className="w-5 h-5" />
-              <span className="sr-only">GitHub Profile</span>
-            </a>
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

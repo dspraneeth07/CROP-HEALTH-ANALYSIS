@@ -1,7 +1,7 @@
 import { LanguageSelector } from "./LanguageSelector";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
-import { Flag } from "lucide-react";
+import { Flag, Github } from "lucide-react";
 
 export function Navigation() {
   const teamMembers = [
@@ -39,22 +39,26 @@ export function Navigation() {
         </div>
       </nav>
 
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t py-4">
+      <footer className="bg-white/80 backdrop-blur-md border-t py-8 mt-16">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-8">
-              <Link to="/" className="text-lg font-semibold text-primary hover:scale-105 transition-transform">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <Link 
+                to="https://www.researchgate.net/lab/XPEDITION-R-RESEARCH-GROUP-Sai-Praneeth-Reddy-Dhadi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xl font-bold text-primary hover:scale-105 transition-transform inline-block"
+              >
                 Xpedition R
               </Link>
-              
-              <div className="hidden md:block">
-                <h3 className="text-sm font-semibold mb-2">Our Team</h3>
-                <div className="grid grid-cols-2 gap-x-8 gap-y-1">
+              <div className="space-y-2">
+                <h3 className="text-sm font-semibold">Our Team</h3>
+                <div className="grid grid-cols-2 gap-2">
                   {teamMembers.map((member, index) => (
                     <Link 
                       key={index}
                       to="/about"
-                      className="text-xs text-gray-600 hover:text-primary transition-colors"
+                      className="text-sm text-gray-600 hover:text-primary transition-colors"
                     >
                       {member}
                     </Link>
@@ -62,10 +66,29 @@ export function Navigation() {
                 </div>
               </div>
             </div>
-
-            <div className="flex items-center space-x-2 bg-primary/10 px-3 py-1.5 rounded-full">
-              <Flag className="w-4 h-4 text-primary" />
-              <span className="text-xs font-medium text-primary">Made in India</span>
+            
+            <div className="space-y-4">
+              <div className="flex items-center justify-end space-x-2 bg-primary/10 px-3 py-1.5 rounded-full">
+                <Flag className="w-4 h-4 text-primary" />
+                <span className="text-xs font-medium text-primary">Made in India</span>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-gray-600">
+                  Designed and Developed by{" "}
+                  <a
+                    href="https://github.com/dspraneeth07"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:text-primary-dark inline-flex items-center gap-1"
+                  >
+                    Dhadi Sai Praneeth Reddy
+                    <Github className="w-4 h-4" />
+                  </a>
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  © {new Date().getFullYear()} Xpedition R. All rights reserved.
+                </p>
+              </div>
             </div>
           </div>
         </div>
